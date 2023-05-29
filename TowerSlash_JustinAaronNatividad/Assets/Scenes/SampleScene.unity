@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 39335493}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: GroundedSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39335492}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.75, y: 8, z: 0}
+  m_LocalPosition: {x: 0.75, y: -0.56, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -261,7 +261,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145760425}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.94, y: -2.5, z: 0}
+  m_LocalPosition: {x: -0.94, y: -3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -287,7 +287,7 @@ MonoBehaviour:
   groundCheck: {fileID: 566628812}
   anim: {fileID: 313458352}
   runSpeed: 7
-  dashSpeed: 20
+  dashSpeed: 15
   dashTime: 0.1
   dashCooldown: 0.1
   attackTime: 0.3
@@ -329,7 +329,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.6
 --- !u!1 &283685772
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,7 +376,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.5321598, y: 2.3115802}
+  m_Offset: {x: 0.5321598, y: 2.6091433}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -387,7 +387,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 8.749613, y: 2.6962633}
+  m_Size: {x: 8.749613, y: 3.2913895}
   m_EdgeRadius: 0
 --- !u!114 &283685775
 MonoBehaviour:
@@ -641,7 +641,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 1dbd7006036f61a44833302c2ee185ce, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -786,7 +786,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.5188679, g: 0.27703318, b: 0.17377181, a: 0}
+  m_BackGroundColor: {r: 0.2399041, g: 0.21622464, b: 0.4056604, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -849,7 +849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 313458351}
   followSpeed: 0.1
-  yOffset: 2.5
+  yOffset: 3.5
 --- !u!1 &543149278
 GameObject:
   m_ObjectHideFlags: 0
@@ -971,7 +971,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 1dbd7006036f61a44833302c2ee185ce, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1171,7 +1171,7 @@ GameObject:
   m_Component:
   - component: {fileID: 929789083}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: FlyingSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1185,7 +1185,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 929789082}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 8, z: 0}
+  m_LocalPosition: {x: -2, y: -0.56, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1313,7 +1313,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 1dbd7006036f61a44833302c2ee185ce, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1350,7 +1350,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1080301245}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 7.97, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1371,11 +1371,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f75a5876a55d2944bde30bff15038c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 4057475022946402727, guid: a89c0156c81c159478c79c8b0684d354, type: 3}
-  spawnNodes:
-  - {fileID: 929789083}
-  - {fileID: 39335493}
-  player: {fileID: 313458354}
+  enemyPrefabs:
+  - {fileID: 7234270282824519303, guid: 2e7c1670d70e4ad43aba72ff135746d7, type: 3}
+  - {fileID: 7234270282824519303, guid: 8be5fb96d9195cc409fb4fe1187caa80, type: 3}
+  - {fileID: 7234270282824519303, guid: 0d887b769367c8941a55a4f1dc3b17f4, type: 3}
+  - {fileID: 7234270282824519303, guid: 0f8afa43b8fafb24d8fd58bca8b64f14, type: 3}
+  - {fileID: 7234270282824519303, guid: 5c73aee880b5bf24cac6bd31b04e7c5c, type: 3}
+  - {fileID: 7234270282824519303, guid: 58481e1f900b26741ad3168b1f1ed5a5, type: 3}
+  groundedSpawnNode: {fileID: 39335493}
+  flyingSpawnNode: {fileID: 929789083}
   minSpawnTime: 0.7
   maxSpawnTime: 1.5
   isSpawning: 0
@@ -1464,6 +1468,7 @@ GameObject:
   - component: {fileID: 2008902481}
   - component: {fileID: 2008902482}
   - component: {fileID: 2008902483}
+  - component: {fileID: 2008902484}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1518,6 +1523,19 @@ MonoBehaviour:
   maximumTouchTime: 0.5
   tapTime: 0
   swipeDirection: {x: 0, y: 0}
+--- !u!114 &2008902484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2008902480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4bf383a6986b747a9072e21159150c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetFrameRate: 60
 --- !u!1 &2075206144
 GameObject:
   m_ObjectHideFlags: 0

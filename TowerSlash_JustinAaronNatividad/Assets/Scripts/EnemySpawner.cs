@@ -4,19 +4,17 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private List<Transform> spawnNodes;
-    [SerializeField] private Transform player;
+    [SerializeField] private GameObject[] enemyPrefabs;
+    [Space(10)]
+    [SerializeField] private Transform groundedSpawnNode;
+    [SerializeField] private Transform flyingSpawnNode;
 
     [Header("Parameters")]
     [SerializeField] private float minSpawnTime;
     [SerializeField] private float maxSpawnTime;
 
     public bool isSpawning;
-    private Vector3 spawnPosition;
     
-
-    // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(CO_SpawnEnemies());
@@ -24,17 +22,20 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator CO_SpawnEnemies()
     {
-        int spawnIndex;
+        int spawnTypeIndex;
         float spawnTime;
         isSpawning = true;
         yield return null;
 
         while (isSpawning)
         {
-            spawnIndex = (int)(Random.Range(0,spawnNodes.Count));
+            spawnTypeIndex = (int)(Random.Range(0, enemyPrefabs.Length));
             spawnTime = Random.Range(minSpawnTime, maxSpawnTime);
-            spawnPosition = new Vector3(spawnNodes[spawnIndex].position.x, spawnNodes[spawnIndex].position.y, 0);
-            Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+
+            Enemy spawnedEnemy = Instantiate(enemyPrefabs[spawnTypeIndex], transform.position, Quaternion.identity).GetComponent<Enemy>();
+            if      (spawnedEnemy.type == EnemyType.Grounded) spawnedEnemy.transform.position = groundedSpawnNode.position;
+            else if (spawnedEnemy.type == EnemyType.Flying)   spawnedEnemy.transform.position = flyingSpawnNode.position;
+
             yield return new WaitForSeconds(spawnTime);
         }
     }

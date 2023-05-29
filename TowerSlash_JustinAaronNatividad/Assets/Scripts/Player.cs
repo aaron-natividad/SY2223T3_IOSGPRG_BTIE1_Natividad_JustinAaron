@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
             attackRange.enemies.RemoveAt(0);
             attackPosition = currentEnemy.transform.position;
             yield return null;
-            Destroy(currentEnemy);
+            currentEnemy.GetComponent<Enemy>().CompareValue(direction);
             playerState = PlayerState.Attack;
             yield return new WaitForSeconds(attackTime);
             playerState = PlayerState.Run;
