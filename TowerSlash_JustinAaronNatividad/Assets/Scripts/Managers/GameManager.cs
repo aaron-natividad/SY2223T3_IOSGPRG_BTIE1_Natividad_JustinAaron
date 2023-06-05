@@ -6,17 +6,21 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public Transform playerSpawnPosition;
 
-    public GameObject playerPrefab;
+    public delegate void PointsChangeDelegate(int points);
+    public static PointsChangeDelegate OnPointsChange;
 
-    public Player player;
     public CameraFollow cam;
-    public UIManager ui;
+    public GameUIManager ui;
     public TileSpawner tileSpawner;
     public EnemySpawner enemySpawner;
-    public int points;
-    public float gravity;
+
+    [Space(10)]
+    [SerializeField] private Transform playerSpawnPosition;
+    [SerializeField] private float gravity;
+
+    [HideInInspector] public Player player;
+    [HideInInspector] public int points;
 
     private void Awake()
     {
@@ -34,6 +38,21 @@ public class GameManager : MonoBehaviour
         StartCoroutine(CO_StartGame());
     }
 
+    public void ReceivePoints(GameObject enemyObj, bool isDestroyedByPlayer)
+    {
+        if (isDestroyedByPlayer)
+        {
+            points += enemyObj.GetComponent<Enemy>().pointValue;
+        }
+        OnPointsChange?.Invoke(points);
+    }
+
+    public void ReceivePoints(int pointValue)
+    {
+        points += pointValue;
+        OnPointsChange?.Invoke(points);
+    }
+
     public void GameOver()
     {
         Destroy(player.gameObject);
@@ -44,11 +63,13 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator CO_StartGame()
     {
+        points = 0;
         yield return new WaitForSeconds(1f);
-        ui.ActivateUI(0);
+
         StartCoroutine(tileSpawner.AnimateTiles(0));
         yield return new WaitForSeconds(0.5f);
-        player = Instantiate(playerPrefab, playerSpawnPosition.position, Quaternion.identity).GetComponent<Player>();
+
+        player = Instantiate(ChoiceManager.instance.GetPlayerPrefab(), playerSpawnPosition.position, Quaternion.identity).GetComponent<Player>();
         enemySpawner.Initialize();
     }
 

@@ -362,6 +362,7 @@ MonoBehaviour:
   dashSpeed: 15
   dashTime: 0.1
   dashCooldown: 0.1
+  dashPointValue: 5
   attackTime: 0.3
 --- !u!58 &2782969064177096610
 CircleCollider2D:
@@ -413,6 +414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 3
+  isAlive: 1
 --- !u!114 &2782969064177096609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,9 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f74baf5ef3c0ea547ba028e4029e6ae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2782969064177096612}
-  state: 0
-  maxGaugeValue: 100
   gaugeIncrease: 10
   gaugeDecreaseSpeed: 5
   activeTime: 10
+  state: 0

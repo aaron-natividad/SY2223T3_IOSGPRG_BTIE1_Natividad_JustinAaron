@@ -26,10 +26,10 @@ public class EnemySpawner : MonoBehaviour
         enemyList.Clear();
     }
 
-    public void ReplaceEnemy(GameObject destroyedEnemy, bool isDestroyedByPlayer, bool spawnNewEnemy)
+    public void ReplaceEnemy(GameObject destroyedEnemy, bool isDestroyedByPlayer)
     {
         enemyList.Remove(destroyedEnemy);
-        if (spawnNewEnemy)
+        if (GameManager.instance.player.health.isAlive)
         {
             SpawnNewEnemyRaw();
         }

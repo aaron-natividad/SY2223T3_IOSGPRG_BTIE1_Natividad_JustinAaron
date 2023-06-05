@@ -82,7 +82,10 @@ public class Arrow : MonoBehaviour
     public void DirectArrow(int faceValue)
     {
         arrowSprite.transform.Rotate(new Vector3(0, 0, 90 * faceValue));
-        if(type == ArrowType.Opposite) arrowSprite.transform.Rotate(new Vector3(0, 0, 180));
+        if (type == ArrowType.Opposite)
+        {
+            arrowSprite.transform.Rotate(new Vector3(0, 0, 180));
+        }
     }
 
     public int SwipeDirectionToInt(SwipeDirection direction)

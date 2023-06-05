@@ -370,7 +370,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20a4bfb1f92ed7f45a9781a599401269, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   arrow: {fileID: 4356103768284253428}
+  pointValue: 10
+  powerupChance: 0.03
+  isBeingDestroyed: 0
 --- !u!114 &4356103768284253428
 MonoBehaviour:
   m_ObjectHideFlags: 0

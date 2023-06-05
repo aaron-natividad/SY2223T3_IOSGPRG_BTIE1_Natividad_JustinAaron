@@ -5,7 +5,7 @@ using UnityEngine;
 public class AttackRange : MonoBehaviour
 {
     public Player player;
-    public List<GameObject> enemies = new List<GameObject>();
+    [HideInInspector] public List<GameObject> enemies = new List<GameObject>();
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -24,8 +24,8 @@ public class AttackRange : MonoBehaviour
             enemies.Remove(collision.gameObject);
             if (!enemy.isBeingDestroyed)
             {
-                player.health.TakeDamage(1);
-                enemy.KillEnemy(false, player.health.isAlive);
+                player.health.TakeDamage();
+                enemy.KillEnemy(false);
             }
         }
     }

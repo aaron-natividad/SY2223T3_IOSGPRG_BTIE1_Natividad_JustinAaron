@@ -5,9 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class GameUIManager : MonoBehaviour
 {
-    public static UIManager instance;
+    public static GameUIManager instance;
 
     [Header("Panels")]
     public GameObject gameUI;
@@ -19,16 +19,26 @@ public class UIManager : MonoBehaviour
 
     [Header("Private UI Elements")]
     [SerializeField] private GameObject dashBarParent;
-    [SerializeField] private Image dashBar;
-    [Space(10)]
-    [SerializeField] private Image flashImage;
-    [Space(10)]
     [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private TextMeshProUGUI pointsText;
+    [SerializeField] private Image dashBar;
+    [SerializeField] private Image flashImage;
 
     [Header("Parameters")]
     [SerializeField] private float flashSpeed;
 
+    private PlayerDashGauge dashGauge;
     private int internalHealthCounter = 0;
+
+    private void OnEnable()
+    {
+        GameManager.OnPointsChange += UpdatePointsUI;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnPointsChange -= UpdatePointsUI;
+    }
 
     private void Awake()
     {
@@ -50,23 +60,18 @@ public class UIManager : MonoBehaviour
     {
         if (GameManager.instance.player == null) return;
 
-        switch (GameManager.instance.player.dashGauge.state)
+        if (dashGauge == null)
         {
-            case GaugeState.Inactive:
-                dashButton.gameObject.SetActive(false);
-                dashBarParent.gameObject.SetActive(true);
-                dashBar.fillAmount = GameManager.instance.player.dashGauge.GetGaugePercentage();
-                break;
-            case GaugeState.Active:
-                dashButton.gameObject.SetActive(true);
-                dashBarParent.gameObject.SetActive(false);
-                break;
-            case GaugeState.Cooldown:
-                dashButton.gameObject.SetActive(false);
-                dashBarParent.gameObject.SetActive(false);
-                break;
+            dashGauge = GameManager.instance.player.dashGauge;
         }
-        
+
+        dashButton.gameObject.SetActive(dashGauge.state == GaugeState.Active);
+        dashBarParent.SetActive(dashGauge.state == GaugeState.Inactive);
+
+        if(dashGauge.state == GaugeState.Inactive)
+        {
+            dashBar.fillAmount = GameManager.instance.player.dashGauge.GetGaugePercentage();
+        }
     }
 
     public void UpdateHealthUI(int health)
@@ -78,6 +83,12 @@ public class UIManager : MonoBehaviour
         internalHealthCounter = health;
         healthText.text = health.ToString("00");
         StartCoroutine(CO_Pop(healthText.gameObject));
+    }
+
+    public void UpdatePointsUI(int points)
+    {
+        pointsText.text = points.ToString("000");
+        StartCoroutine(CO_Pop(pointsText.gameObject));
     }
 
     public void ActivateUI(int panelID)
@@ -102,16 +113,15 @@ public class UIManager : MonoBehaviour
 
     public IEnumerator CO_Flash()
     {
-        Color invis = new Color(0, 0, 0, 0);
         float timer = 0;
 
         while (timer < 1)
         {
-            flashImage.color = Color.Lerp(Color.red, invis, timer);
+            flashImage.color = Color.Lerp(Color.red, Color.clear, timer);
             timer += Time.deltaTime * flashSpeed;
             yield return new WaitForFixedUpdate();
         }
 
-        flashImage.color = invis;
+        flashImage.color = Color.clear;
     }
 }

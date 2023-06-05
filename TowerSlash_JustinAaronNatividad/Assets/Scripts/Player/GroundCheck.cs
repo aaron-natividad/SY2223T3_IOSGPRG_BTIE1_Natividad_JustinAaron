@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GroundCheck : MonoBehaviour
 {
-    public bool isGrounded;
-    public List<GameObject> groundTiles = new List<GameObject>();
+    [HideInInspector] public bool isGrounded;
+    [HideInInspector] public List<GameObject> groundTiles = new List<GameObject>();
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -13,7 +13,7 @@ public class GroundCheck : MonoBehaviour
         {
             groundTiles.Add(collision.gameObject);
         }
-        CheckGrounded();
+        isGrounded = groundTiles.Count > 0;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -22,18 +22,6 @@ public class GroundCheck : MonoBehaviour
         {
             groundTiles.Remove(collision.gameObject);
         }
-        CheckGrounded();
-    }
-
-    public void CheckGrounded()
-    {
-        if (groundTiles.Count > 0)
-        {
-            isGrounded = true;
-        }
-        else
-        {
-            isGrounded = false;
-        }
+        isGrounded = groundTiles.Count > 0;
     }
 }

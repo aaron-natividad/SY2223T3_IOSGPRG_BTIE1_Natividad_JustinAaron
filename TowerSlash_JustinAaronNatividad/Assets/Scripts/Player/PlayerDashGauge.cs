@@ -6,14 +6,16 @@ public enum GaugeState { Inactive, Active, Cooldown }
 
 public class PlayerDashGauge : MonoBehaviour
 {
-    public Player player;
-    public GaugeState state = GaugeState.Inactive;
-
-    public float maxGaugeValue = 100;
+    public delegate void PowerActiveDelegate();
+    public PowerActiveDelegate OnPowerActivate;
+    
     public float gaugeIncrease = 5;
     public float gaugeDecreaseSpeed;
     public float activeTime;
 
+    [HideInInspector] public GaugeState state = GaugeState.Inactive;
+
+    private float maxGaugeValue = 100;
     private float internalGaugeValue = 0;
     private float internalTimer = 0;
 
@@ -22,14 +24,14 @@ public class PlayerDashGauge : MonoBehaviour
         switch (state)
         {
             case GaugeState.Inactive:
-                internalGaugeValue = Mathf.Clamp(internalGaugeValue - Time.deltaTime * gaugeDecreaseSpeed, 0, 100);
-                if (internalGaugeValue >= 100)
+                internalGaugeValue = Mathf.Clamp(internalGaugeValue - Time.deltaTime * gaugeDecreaseSpeed, 0, maxGaugeValue);
+                if (internalGaugeValue >= maxGaugeValue)
                 {
                     state = GaugeState.Active;
                 }
                 break;
             case GaugeState.Active:
-                internalGaugeValue = 100;
+                internalGaugeValue = maxGaugeValue;
                 break;
             case GaugeState.Cooldown:
                 internalGaugeValue = 0;
@@ -52,7 +54,7 @@ public class PlayerDashGauge : MonoBehaviour
     {
         internalTimer = activeTime;
         state = GaugeState.Cooldown;
-        player.StartCoroutine(player.CO_Autoplay());
+        OnPowerActivate?.Invoke();
     }
 
     public float GetGaugePercentage()

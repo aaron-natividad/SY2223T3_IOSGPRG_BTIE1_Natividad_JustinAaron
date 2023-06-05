@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashTime;
     [SerializeField] private float dashCooldown;
+    [SerializeField] private int dashPointValue;
     [SerializeField] private float attackTime;
 
     private PlayerState playerState;
@@ -31,17 +32,19 @@ public class Player : MonoBehaviour
     {
         InputManager.OnSwipe += Attack;
         InputManager.OnTap += Dash;
+        dashGauge.OnPowerActivate += Autoplay;
     }
 
     private void OnDisable()
     {
         InputManager.OnSwipe -= Attack;
         InputManager.OnTap -= Dash;
+        dashGauge.OnPowerActivate -= Autoplay;
     }
 
     private void Start()
     {
-        UIManager.instance.dashButton.onClick.AddListener(dashGauge.Activate);
+        GameUIManager.instance.dashButton.onClick.AddListener(dashGauge.Activate);
         GameManager.instance.cam.target = gameObject;
         internalMoveSpeed = runSpeed;
     }
@@ -75,7 +78,7 @@ public class Player : MonoBehaviour
 
     public void Autoplay()
     {
-        if (actionCoroutine != null) return;
+        StopAllCoroutines();
         actionCoroutine = StartCoroutine(CO_Autoplay());
     }
     #endregion
@@ -84,6 +87,7 @@ public class Player : MonoBehaviour
     public IEnumerator CO_Dash()
     {
         internalMoveSpeed = dashSpeed;
+        GameManager.instance.ReceivePoints(dashPointValue);
         StartCoroutine(trailSpawner.CO_SpawnTrail(dashTime));
         StartCoroutine(GameManager.instance.cam.CO_Pop());
         yield return new WaitForSeconds(dashTime);
@@ -103,7 +107,7 @@ public class Player : MonoBehaviour
             if (currentEnemy.CompareDirection(direction))
             {
                 StartCoroutine(GameManager.instance.cam.CO_Shake());
-                currentEnemy.KillEnemy(true, true);
+                currentEnemy.KillEnemy(true);
                 dashGauge.IncreaseGauge();
             }
 
@@ -131,7 +135,7 @@ public class Player : MonoBehaviour
                 Enemy currentEnemy = TargetCurrentEnemy();
                 yield return null;
 
-                currentEnemy.KillEnemy(true, true);
+                currentEnemy.KillEnemy(true);
                 StartCoroutine(GameManager.instance.cam.CO_Shake());
 
                 StartCoroutine(trailSpawner.CO_SpawnTrail(attackTime));

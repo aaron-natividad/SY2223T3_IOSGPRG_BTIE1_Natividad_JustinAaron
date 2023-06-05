@@ -11,30 +11,30 @@ public class PlayerHealth : MonoBehaviour
     public DeathDelegate OnDeath;
 
     public int health;
-    public bool isAlive;
+    [HideInInspector] public bool isAlive = true;
 
     private void Start()
     {
-        OnHealthChange += UIManager.instance.UpdateHealthUI;
+        OnHealthChange += GameUIManager.instance.UpdateHealthUI;
         OnDeath += GameManager.instance.GameOver;
         OnHealthChange(health);
     }
 
-    public void Heal(int healAmount)
+    public void Heal()
     {
-        health += healAmount;
+        health++;
         OnHealthChange?.Invoke(health);
     }
 
-    public bool TakeDamage(int damageAmount)
+    public void TakeDamage()
     {
-        health -= damageAmount;
+        health--;
         OnHealthChange?.Invoke(health);
+
         if (health <= 0)
         {
             isAlive = false;
             OnDeath?.Invoke();
         }
-        return health <= 0;
     }
 }

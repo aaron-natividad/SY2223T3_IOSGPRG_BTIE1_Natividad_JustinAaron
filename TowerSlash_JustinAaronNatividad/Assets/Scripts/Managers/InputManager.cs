@@ -39,9 +39,19 @@ public class InputManager : MonoBehaviour
         if (Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began) DragStart();
-            else if (touch.phase == TouchPhase.Ended) DragRelease();
-            else Drag();
+
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    DragStart();
+                    break;
+                case TouchPhase.Ended:
+                    DragRelease();
+                    break;
+                default:
+                    Drag();
+                    break;
+            }
         }
     }
 
@@ -64,44 +74,22 @@ public class InputManager : MonoBehaviour
         touchTime = 0;
         swipeDirection = endPos - startPos;
 
-        // tap
         if (swipeDirection.magnitude < minimumSwipeMagnitude)
         {
-            if (temporaryTouchTime < maximumTouchTime && OnTap != null)
+            if (temporaryTouchTime < maximumTouchTime)
             {
-                Debug.Log("Tap");
                 OnTap?.Invoke();
             }
             return; 
         }
 
-        // if greater horizontal
         if(Mathf.Abs(swipeDirection.x) >= Mathf.Abs(swipeDirection.y))
         {
-            if (swipeDirection.x > 0)
-            {
-                Debug.Log("Right");
-                OnSwipe?.Invoke(SwipeDirection.Right);
-            }
-            else if (swipeDirection.x < 0)
-            {
-                Debug.Log("Left");
-                OnSwipe?.Invoke(SwipeDirection.Left);
-            }
+            OnSwipe?.Invoke(swipeDirection.x > 0 ? SwipeDirection.Right : SwipeDirection.Left);
         }
-        // if greater vertical
         else
         {
-            if (swipeDirection.y > 0)
-            {
-                Debug.Log("Up");
-                OnSwipe?.Invoke(SwipeDirection.Up);
-            }
-            else if (swipeDirection.y < 0)
-            {
-                Debug.Log("Down");
-                OnSwipe?.Invoke(SwipeDirection.Down);
-            }
+            OnSwipe?.Invoke(swipeDirection.y > 0 ? SwipeDirection.Up : SwipeDirection.Down);
         }
     }
 }

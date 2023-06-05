@@ -372,6 +372,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   arrow: {fileID: 4356103768284253428}
+  pointValue: 10
+  powerupChance: 0.03
+  isBeingDestroyed: 0
 --- !u!114 &4356103768284253428
 MonoBehaviour:
   m_ObjectHideFlags: 0
