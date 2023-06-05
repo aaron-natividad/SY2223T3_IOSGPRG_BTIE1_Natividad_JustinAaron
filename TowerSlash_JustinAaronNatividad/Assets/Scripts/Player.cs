@@ -6,9 +6,12 @@ public enum PlayerState { Run, Attack, Fall };
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private AttackRange attackRange;
-    [SerializeField] private GroundCheck groundCheck;
-    [SerializeField] private Animator anim;
+    public PlayerHealth health;
+    public PlayerDashGauge dashGauge;
+    public AttackRange attackRange;
+    public GroundCheck groundCheck;
+    public TrailSpawner trailSpawner;
+    public Animator anim;
 
     [Header("Parameters")]
     [SerializeField] private float runSpeed;
@@ -16,12 +19,13 @@ public class Player : MonoBehaviour
     [SerializeField] private float dashTime;
     [SerializeField] private float dashCooldown;
     [SerializeField] private float attackTime;
-    [SerializeField] private float gravity;
 
-    private Coroutine actionCoroutine;
+    private PlayerState playerState;
     private float internalMoveSpeed;
+    
+    private Coroutine actionCoroutine;
     private Vector3 attackPosition;
-    public PlayerState playerState;
+    private Vector3 attackVelocity;
 
     private void OnEnable()
     {
@@ -37,41 +41,26 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        Physics2D.gravity = new Vector2(gravity, 0f);
+        UIManager.instance.dashButton.onClick.AddListener(dashGauge.Activate);
+        GameManager.instance.cam.target = gameObject;
         internalMoveSpeed = runSpeed;
     }
-
-    /*private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.UpArrow) && actionCoroutine == null) actionCoroutine = StartCoroutine(CO_Dash());
-        if (Input.GetKeyDown(KeyCode.Space) && actionCoroutine == null) actionCoroutine = StartCoroutine(CO_Attack());
-    }*/
 
     private void FixedUpdate()
     {
         if (playerState != PlayerState.Attack)
         {
             transform.position += Vector3.up * internalMoveSpeed * Time.deltaTime;
-            if (groundCheck.isGrounded) playerState = PlayerState.Run;
-            else playerState = PlayerState.Fall;
+            playerState = groundCheck.isGrounded ? PlayerState.Run : PlayerState.Fall;
         }
         else
         {
-            transform.position = Vector3.Lerp(transform.position, attackPosition, 0.3f);
+            transform.position = Vector3.SmoothDamp(transform.position, attackPosition, ref attackVelocity, 0.05f);
         }
         UpdateAnimation();
     }
 
-    public void UpdateAnimation()
-    {
-        switch (playerState)
-        {
-            case PlayerState.Run: anim.SetInteger("playerState", 0); break;
-            case PlayerState.Attack: anim.SetInteger("playerState", 1); break;
-            case PlayerState.Fall: anim.SetInteger("playerState", 2); break;
-        }
-    }
-
+    #region Delegate Handlers
     public void Dash()
     {
         if (actionCoroutine != null) return;
@@ -84,32 +73,105 @@ public class Player : MonoBehaviour
         actionCoroutine = StartCoroutine(CO_Attack(direction));
     }
 
-    IEnumerator CO_Dash()
+    public void Autoplay()
+    {
+        if (actionCoroutine != null) return;
+        actionCoroutine = StartCoroutine(CO_Autoplay());
+    }
+    #endregion
+
+    #region Action Coroutines
+    public IEnumerator CO_Dash()
     {
         internalMoveSpeed = dashSpeed;
+        StartCoroutine(trailSpawner.CO_SpawnTrail(dashTime));
+        StartCoroutine(GameManager.instance.cam.CO_Pop());
         yield return new WaitForSeconds(dashTime);
+
         internalMoveSpeed = runSpeed;
         yield return new WaitForSeconds(dashCooldown);
         actionCoroutine = null;
     }
 
-    IEnumerator CO_Attack(SwipeDirection direction)
+    public IEnumerator CO_Attack(SwipeDirection direction)
     {
-        GameObject currentEnemy;
-        yield return null;
-
-        if(attackRange.enemies.Count > 0)
+        if (attackRange.enemies.Count > 0)
         {
-            currentEnemy = attackRange.enemies[0];
-            attackRange.enemies.RemoveAt(0);
-            attackPosition = currentEnemy.transform.position;
+            Enemy currentEnemy = TargetCurrentEnemy();
             yield return null;
-            currentEnemy.GetComponent<Enemy>().CompareValue(direction);
+
+            if (currentEnemy.CompareDirection(direction))
+            {
+                StartCoroutine(GameManager.instance.cam.CO_Shake());
+                currentEnemy.KillEnemy(true, true);
+                dashGauge.IncreaseGauge();
+            }
+
+            StartCoroutine(trailSpawner.CO_SpawnTrail(attackTime));
             playerState = PlayerState.Attack;
             yield return new WaitForSeconds(attackTime);
+
             playerState = PlayerState.Run;
         }
 
         actionCoroutine = null;
+    }
+
+    public IEnumerator CO_Autoplay()
+    {
+        StartCoroutine(GameManager.instance.cam.CO_ZoomOut());
+        internalMoveSpeed = dashSpeed;
+        yield return null;
+
+        while(dashGauge.state == GaugeState.Cooldown)
+        {
+            internalMoveSpeed = dashSpeed;
+            if (attackRange.enemies.Count > 0)
+            {
+                Enemy currentEnemy = TargetCurrentEnemy();
+                yield return null;
+
+                currentEnemy.KillEnemy(true, true);
+                StartCoroutine(GameManager.instance.cam.CO_Shake());
+
+                StartCoroutine(trailSpawner.CO_SpawnTrail(attackTime));
+                playerState = PlayerState.Attack;
+                yield return new WaitForSeconds(attackTime);
+
+                playerState = PlayerState.Run;
+            }
+            yield return null;
+        }
+
+        StartCoroutine(GameManager.instance.cam.CO_ZoomIn());
+        internalMoveSpeed = runSpeed;
+        actionCoroutine = null;
+    }
+    #endregion
+
+    public void UpdateAnimation()
+    {
+        switch (playerState)
+        {
+            case PlayerState.Run:
+                anim.SetInteger("playerState", 0);
+                break;
+            case PlayerState.Attack:
+                anim.SetInteger("playerState", 1);
+                break;
+            case PlayerState.Fall:
+                anim.SetInteger("playerState", 2);
+                break;
+        }
+    }
+
+    public Enemy TargetCurrentEnemy()
+    {
+        GameObject currentEnemy;
+        currentEnemy = attackRange.enemies[0];
+        attackRange.enemies.RemoveAt(0);
+        attackPosition = currentEnemy.transform.position;
+
+        return currentEnemy.GetComponent<Enemy>();
     }
 }

@@ -6,41 +6,40 @@ public enum EnemyType { Grounded, Flying }
 
 public class Enemy : MonoBehaviour
 {
-    public delegate void EnemyDestroyDelegate();
+    public delegate void EnemyDestroyDelegate(GameObject self, bool isDestroyedByPlayer, bool spawnNewEnemy);
     public EnemyDestroyDelegate OnEnemyDestroy;
 
     public EnemyType type;
     public Arrow arrow;
-
-    private void OnEnable()
-    {
-        OnEnemyDestroy += DestroyEnemy;
-    }
-
-    private void OnDisable()
-    {
-        OnEnemyDestroy -= DestroyEnemy;
-    }
+    public bool isBeingDestroyed;
 
     private void Start()
     {
+        GameManager.instance.player.health.OnDeath += ClearEnemy;
         arrow.SetValue((int)Random.Range(0, 4));
     }
 
-    public void ActivateEnemy()
-    {
-        arrow.isActive = true;
-    }
-
-    public void DestroyEnemy()
+    public void ClearEnemy()
     {
         Destroy(gameObject);
     }
 
-    public bool CompareValue(SwipeDirection direction)
+    public void KillEnemy(bool isDestroyedByPlayer, bool spawnNewEnemy)
     {
-        bool isCorrect = arrow.arrowValue == arrow.SwipeDirectionToInt(direction);
-        if (isCorrect && OnEnemyDestroy != null) OnEnemyDestroy();
-        return isCorrect;
+        if (isBeingDestroyed) return;
+        isBeingDestroyed = true;
+
+        OnEnemyDestroy?.Invoke(gameObject, isDestroyedByPlayer, spawnNewEnemy);
+        Destroy(gameObject);
+    }
+
+    public bool CompareDirection(SwipeDirection direction)
+    {
+        return arrow.arrowValue == arrow.SwipeDirectionToInt(direction);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.instance.player.health.OnDeath -= ClearEnemy;
     }
 }

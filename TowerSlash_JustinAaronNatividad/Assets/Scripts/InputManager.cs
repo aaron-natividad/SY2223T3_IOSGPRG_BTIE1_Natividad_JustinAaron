@@ -22,12 +22,16 @@ public class InputManager : MonoBehaviour
     private float touchTime;
     private Vector2 startPos;
     private Vector2 endPos;
-    public Vector2 swipeDirection;
+    private Vector2 swipeDirection;
 
     private void Awake()
     {
-        if (instance != null) Destroy(this);
-        else instance = this;
+        if (instance != null && instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        instance = this;
     }
 
     void Update()
@@ -66,7 +70,7 @@ public class InputManager : MonoBehaviour
             if (temporaryTouchTime < maximumTouchTime && OnTap != null)
             {
                 Debug.Log("Tap");
-                OnTap();
+                OnTap?.Invoke();
             }
             return; 
         }
@@ -77,12 +81,12 @@ public class InputManager : MonoBehaviour
             if (swipeDirection.x > 0)
             {
                 Debug.Log("Right");
-                OnSwipe(SwipeDirection.Right);
+                OnSwipe?.Invoke(SwipeDirection.Right);
             }
             else if (swipeDirection.x < 0)
             {
                 Debug.Log("Left");
-                OnSwipe(SwipeDirection.Left);
+                OnSwipe?.Invoke(SwipeDirection.Left);
             }
         }
         // if greater vertical
@@ -91,12 +95,12 @@ public class InputManager : MonoBehaviour
             if (swipeDirection.y > 0)
             {
                 Debug.Log("Up");
-                OnSwipe(SwipeDirection.Up);
+                OnSwipe?.Invoke(SwipeDirection.Up);
             }
             else if (swipeDirection.y < 0)
             {
                 Debug.Log("Down");
-                OnSwipe(SwipeDirection.Down);
+                OnSwipe?.Invoke(SwipeDirection.Down);
             }
         }
     }

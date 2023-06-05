@@ -9,19 +9,31 @@ public class GroundCheck : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Ground")) groundTiles.Add(collision.gameObject);
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            groundTiles.Add(collision.gameObject);
+        }
         CheckGrounded();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground")) groundTiles.Remove(collision.gameObject);
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            groundTiles.Remove(collision.gameObject);
+        }
         CheckGrounded();
     }
 
     public void CheckGrounded()
     {
-        if (groundTiles.Count > 0) isGrounded = true;
-        else isGrounded = false;
+        if (groundTiles.Count > 0)
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
     }
 }

@@ -5,38 +5,53 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] enemyPrefabs;
-    [Space(10)]
-    [SerializeField] private Transform groundedSpawnNode;
-    [SerializeField] private Transform flyingSpawnNode;
-
     [Header("Parameters")]
-    [SerializeField] private float minSpawnTime;
-    [SerializeField] private float maxSpawnTime;
+    [SerializeField] private float groundedXPos;
+    [SerializeField] private float flyingXPos;
+    [SerializeField] private float minSpawnDistance;
+    [SerializeField] private float maxSpawnDistance;
+    [Space(10)]
+    [SerializeField] private List<GameObject> enemyList = new List<GameObject>();
 
-    public bool isSpawning;
-    
-    void Start()
+    public void Initialize()
     {
-        StartCoroutine(CO_SpawnEnemies());
+        for(int i = 0; i < 5; i++)
+        {
+            SpawnNewEnemyRaw();
+        }
     }
 
-    IEnumerator CO_SpawnEnemies()
+    public void ClearEnemies()
     {
-        int spawnTypeIndex;
-        float spawnTime;
-        isSpawning = true;
-        yield return null;
+        enemyList.Clear();
+    }
 
-        while (isSpawning)
+    public void ReplaceEnemy(GameObject destroyedEnemy, bool isDestroyedByPlayer, bool spawnNewEnemy)
+    {
+        enemyList.Remove(destroyedEnemy);
+        if (spawnNewEnemy)
         {
-            spawnTypeIndex = (int)(Random.Range(0, enemyPrefabs.Length));
-            spawnTime = Random.Range(minSpawnTime, maxSpawnTime);
-
-            Enemy spawnedEnemy = Instantiate(enemyPrefabs[spawnTypeIndex], transform.position, Quaternion.identity).GetComponent<Enemy>();
-            if      (spawnedEnemy.type == EnemyType.Grounded) spawnedEnemy.transform.position = groundedSpawnNode.position;
-            else if (spawnedEnemy.type == EnemyType.Flying)   spawnedEnemy.transform.position = flyingSpawnNode.position;
-
-            yield return new WaitForSeconds(spawnTime);
+            SpawnNewEnemyRaw();
         }
+    }
+
+    public void SpawnNewEnemyRaw()
+    {
+        int spawnTypeIndex = Random.Range(0, enemyPrefabs.Length);
+        float spawnDistance = Random.Range(minSpawnDistance, maxSpawnDistance);
+        float spawnY = enemyList.Count > 0 ? enemyList[enemyList.Count - 1].transform.position.y + spawnDistance : transform.position.y; 
+
+        Enemy spawnedEnemy = Instantiate(enemyPrefabs[spawnTypeIndex], transform.position, Quaternion.identity).GetComponent<Enemy>();
+        switch (spawnedEnemy.type)
+        {
+            case EnemyType.Grounded:
+                spawnedEnemy.transform.position = new Vector3(groundedXPos, spawnY, 0);
+                break;
+            case EnemyType.Flying:
+                spawnedEnemy.transform.position = new Vector3(flyingXPos, spawnY, 0);
+                break;
+        }
+        spawnedEnemy.OnEnemyDestroy += ReplaceEnemy;
+        enemyList.Add(spawnedEnemy.gameObject);
     }
 }
