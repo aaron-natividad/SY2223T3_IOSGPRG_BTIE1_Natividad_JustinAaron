@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class FrameRateManager : MonoBehaviour
 {
+    public static FrameRateManager instance;
+
     [Header("Frame Settings")]
     int MaxRate = 9999;
     public float TargetFrameRate = 60.0f;
     float currentFrameTime;
     void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = MaxRate;
         currentFrameTime = Time.realtimeSinceStartup;

@@ -315,7 +315,7 @@ GameObject:
   - component: {fileID: 2782969064177096608}
   - component: {fileID: 2782969064177096609}
   m_Layer: 0
-  m_Name: Player
+  m_Name: PlayerLife
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -413,7 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0dc31db60081894d960293b6131c179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 3
+  health: 5
   isAlive: 1
 --- !u!114 &2782969064177096609
 MonoBehaviour:
@@ -427,7 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f74baf5ef3c0ea547ba028e4029e6ae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gaugeIncrease: 10
-  gaugeDecreaseSpeed: 5
+  gaugeIncrease: 5
+  gaugeDecreaseSpeed: 1
   activeTime: 10
   state: 0

@@ -32,6 +32,7 @@ public class InputManager : MonoBehaviour
             return;
         }
         instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     void Update()

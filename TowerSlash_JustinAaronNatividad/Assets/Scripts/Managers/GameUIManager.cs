@@ -21,6 +21,7 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] private GameObject dashBarParent;
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private TextMeshProUGUI pointsText;
+    [SerializeField] private TextMeshProUGUI gameOverPointsText;
     [SerializeField] private Image dashBar;
     [SerializeField] private Image flashImage;
 
@@ -88,6 +89,7 @@ public class GameUIManager : MonoBehaviour
     public void UpdatePointsUI(int points)
     {
         pointsText.text = points.ToString("000");
+        gameOverPointsText.text = points.ToString("000");
         StartCoroutine(CO_Pop(pointsText.gameObject));
     }
 

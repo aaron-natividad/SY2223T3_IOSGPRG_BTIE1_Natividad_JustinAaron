@@ -73,15 +73,15 @@ public class GameManager : MonoBehaviour
         enemySpawner.Initialize();
     }
 
-    public void ReloadGame()
+    public void LoadScene(string sceneName)
     {
-        StartCoroutine(CO_Reload());
+        StartCoroutine(CO_Reload(sceneName));
     }
 
-    public IEnumerator CO_Reload()
+    public IEnumerator CO_Reload(string sceneName)
     {
         StartCoroutine(ui.cover.SetCoverValue(1, 0.5f));
         yield return new WaitForSeconds(0.5f);
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene(sceneName);
     }
 }
