@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public delegate void ClearDelegate();
+    public static ClearDelegate OnClear;
+
     [SerializeField] private GameObject[] enemyPrefabs;
     [Header("Parameters")]
     [SerializeField] private float groundedXPos;
     [SerializeField] private float flyingXPos;
     [SerializeField] private float minSpawnDistance;
     [SerializeField] private float maxSpawnDistance;
+    [SerializeField] private float resetTime;
     [Space(10)]
     [SerializeField] private List<GameObject> enemyList = new List<GameObject>();
 
@@ -24,6 +28,7 @@ public class EnemySpawner : MonoBehaviour
     public void ClearEnemies()
     {
         enemyList.Clear();
+        OnClear?.Invoke();
     }
 
     public void ReplaceEnemy(GameObject destroyedEnemy, bool isDestroyedByPlayer)
@@ -53,5 +58,12 @@ public class EnemySpawner : MonoBehaviour
         }
         spawnedEnemy.OnEnemyDestroy += ReplaceEnemy;
         enemyList.Add(spawnedEnemy.gameObject);
+    }
+
+    public IEnumerator ResetEnemies()
+    {
+        ClearEnemies();
+        yield return new WaitForSeconds(resetTime);
+        SpawnNewEnemyRaw();
     }
 }

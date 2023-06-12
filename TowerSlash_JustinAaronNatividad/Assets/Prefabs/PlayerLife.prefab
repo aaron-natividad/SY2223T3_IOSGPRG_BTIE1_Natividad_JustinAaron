@@ -429,5 +429,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gaugeIncrease: 5
   gaugeDecreaseSpeed: 1
-  activeTime: 10
+  activeTime: 5
   state: 0

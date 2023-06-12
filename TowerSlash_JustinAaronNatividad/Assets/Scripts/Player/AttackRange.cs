@@ -9,18 +9,19 @@ public class AttackRange : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        if (enemy)
         {
-            collision.gameObject.GetComponent<Enemy>().arrow.isActive = true;
-            enemies.Add(collision.gameObject);
+            enemy.arrow.isActive = true;
+            enemies.Add(enemy.gameObject);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        if (enemy)
         {
-            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             enemies.Remove(collision.gameObject);
             if (!enemy.isBeingDestroyed)
             {

@@ -38,6 +38,7 @@ public class PlayerDashGauge : MonoBehaviour
                 internalTimer -= Time.deltaTime;
                 if(internalTimer <= 0)
                 {
+                    StartCoroutine(GameManager.instance.enemySpawner.ResetEnemies());
                     internalTimer = 0;
                     state = GaugeState.Inactive;
                 }

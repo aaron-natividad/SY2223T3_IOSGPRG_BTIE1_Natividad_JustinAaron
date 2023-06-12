@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
+        EnemySpawner.OnClear += ClearEnemy;
         GameManager.instance.player.health.OnDeath += ClearEnemy;
         OnEnemyDestroy += GameManager.instance.ReceivePoints;
         OnPowerup += GameManager.instance.player.health.Heal;
@@ -28,6 +29,7 @@ public class Enemy : MonoBehaviour
 
     private void OnDisable()
     {
+        EnemySpawner.OnClear -= ClearEnemy;
         GameManager.instance.player.health.OnDeath -= ClearEnemy;
         OnEnemyDestroy -= GameManager.instance.ReceivePoints;
         OnPowerup -= GameManager.instance.player.health.Heal;
@@ -70,6 +72,7 @@ public class Enemy : MonoBehaviour
 
     private void OnDestroy()
     {
+        EnemySpawner.OnClear -= ClearEnemy;
         GameManager.instance.player.health.OnDeath -= ClearEnemy;
     }
 }

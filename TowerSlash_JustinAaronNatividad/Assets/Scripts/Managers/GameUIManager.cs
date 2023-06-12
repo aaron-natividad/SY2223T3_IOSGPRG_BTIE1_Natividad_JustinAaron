@@ -16,6 +16,7 @@ public class GameUIManager : MonoBehaviour
     [Header("Public UI Elements")]
     public ScreenCover cover;
     public Button dashButton;
+    public Image dashCooldown;
 
     [Header("Private UI Elements")]
     [SerializeField] private GameObject dashBarParent;
@@ -66,12 +67,27 @@ public class GameUIManager : MonoBehaviour
             dashGauge = GameManager.instance.player.dashGauge;
         }
 
-        dashButton.gameObject.SetActive(dashGauge.state == GaugeState.Active);
-        dashBarParent.SetActive(dashGauge.state == GaugeState.Inactive);
-
-        if(dashGauge.state == GaugeState.Inactive)
+        switch (dashGauge.state)
         {
-            dashBar.fillAmount = GameManager.instance.player.dashGauge.GetGaugePercentage();
+            case GaugeState.Inactive:
+                dashBarParent.SetActive(true);
+                dashButton.gameObject.SetActive(false);
+                dashCooldown.gameObject.SetActive(false);
+                dashBar.fillAmount = GameManager.instance.player.dashGauge.GetGaugePercentage();
+                break;
+            case GaugeState.Active:
+                dashBarParent.SetActive(false);
+                dashButton.gameObject.SetActive(true);
+                dashCooldown.gameObject.SetActive(false);
+                dashButton.enabled = true;
+                break;
+            case GaugeState.Cooldown:
+                dashBarParent.SetActive(false);
+                dashButton.gameObject.SetActive(true);
+                dashCooldown.gameObject.SetActive(true);
+                dashButton.enabled = false;
+                dashCooldown.fillAmount = GameManager.instance.player.dashGauge.GetActivePercentage();
+                break;
         }
     }
 
