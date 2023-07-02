@@ -7,10 +7,6 @@ public class InventoryComponent : MonoBehaviour
     public delegate void AmmoChangeDelegate(int pistolAmmo, int machinegunAmmo, int shotgunAmmo);
     public AmmoChangeDelegate OnAmmoChange;
 
-    public int maxPistolAmmo;
-    public int maxMachineGunAmmo;
-    public int maxShotgunAmmo;
-
     public int pistolAmmo
     {
         get;
@@ -28,6 +24,10 @@ public class InventoryComponent : MonoBehaviour
         get;
         private set;
     }
+
+    public int maxPistolAmmo;
+    public int maxMachineGunAmmo;
+    public int maxShotgunAmmo;
 
     private void Start()
     {

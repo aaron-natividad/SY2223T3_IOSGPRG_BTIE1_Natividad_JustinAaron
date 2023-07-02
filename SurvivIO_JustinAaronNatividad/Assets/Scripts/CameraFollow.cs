@@ -10,7 +10,7 @@ public class CameraFollow : MonoBehaviour
     private Vector3 targetPos;
     private Vector3 camVelocity;
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (target == null)
         {

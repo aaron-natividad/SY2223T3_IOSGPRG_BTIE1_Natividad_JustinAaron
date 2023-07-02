@@ -8,10 +8,13 @@ public class UIManager : MonoBehaviour
 {
     public GameObject unit;
 
+    [Header("UI Components")]
     public Image healthbar;
     public TextMeshProUGUI pistolAmmoText;
     public TextMeshProUGUI machinegunAmmoText;
     public TextMeshProUGUI shotgunAmmoText;
+    public GameObject primaryFrame;
+    public GameObject secondaryFrame;
 
     private HealthComponent health;
     private InventoryComponent inventory;
@@ -49,10 +52,16 @@ public class UIManager : MonoBehaviour
         ForceUpdateUI();
     }
 
-    public void GetUnitComponents()
+    public void UpdateHealth(float healthPercentage)
     {
-        health = unit.GetComponent<HealthComponent>();
-        inventory = unit.GetComponent<InventoryComponent>();
+        healthbar.fillAmount = healthPercentage;
+    }
+
+    public void UpdateAmmo(int pistolAmmo, int machinegunAmmo, int shotgunAmmo)
+    {
+        pistolAmmoText.text = pistolAmmo.ToString("000");
+        machinegunAmmoText.text = machinegunAmmo.ToString("000");
+        shotgunAmmoText.text = shotgunAmmo.ToString("000");
     }
 
     public void ForceUpdateUI()
@@ -66,16 +75,15 @@ public class UIManager : MonoBehaviour
         UpdateAmmo(inventory.pistolAmmo, inventory.machinegunAmmo, inventory.shotgunAmmo);
     }
 
-    public void UpdateHealth(float healthPercentage)
+    public void SwapWeaponUI()
     {
-        healthbar.fillAmount = healthPercentage;
+        primaryFrame.SetActive(!primaryFrame.activeSelf);
+        secondaryFrame.SetActive(!secondaryFrame.activeSelf);
     }
 
-    public void UpdateAmmo(int pistolAmmo, int machinegunAmmo, int shotgunAmmo)
+    public void GetUnitComponents()
     {
-        pistolAmmoText.text = pistolAmmo.ToString("000");
-        machinegunAmmoText.text = machinegunAmmo.ToString("000");
-        shotgunAmmoText.text = shotgunAmmo.ToString("000");
+        health = unit.GetComponent<HealthComponent>();
+        inventory = unit.GetComponent<InventoryComponent>();
     }
-
 }

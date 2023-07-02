@@ -5,16 +5,16 @@ using UnityEngine.AI;
 
 public class MovementComponent : MonoBehaviour
 {
+    [SerializeField] private float moveSpeed;
+
+    // NavMeshAgent still included within movement component because Unit prefab is generic
     private Rigidbody2D rigidBody;
     private NavMeshAgent agent;
-
-    [SerializeField] private float moveSpeed;
 
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
         agent = GetComponent<NavMeshAgent>();
-
         if (agent)
         {
             agent.updateRotation = false;
@@ -23,13 +23,13 @@ public class MovementComponent : MonoBehaviour
         }
     }
 
-    public void MoveAgent(Vector2 movePosition)
-    {
-        agent.SetDestination(new Vector3(movePosition.x, movePosition.y, transform.position.z));
-    }
-
     public void MoveUnit(Vector2 moveDirection)
     {
         rigidBody.velocity = moveDirection * moveSpeed;
+    }
+
+    public void MoveAgent(Vector2 movePosition)
+    {
+        agent.SetDestination(new Vector3(movePosition.x, movePosition.y, transform.position.z));
     }
 }

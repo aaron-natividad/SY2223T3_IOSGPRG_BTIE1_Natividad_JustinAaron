@@ -10,13 +10,13 @@ public class HealthComponent : MonoBehaviour
     public delegate void DeathDelegate();
     public DeathDelegate OnDeath;
 
-    public int maxHealth;
-
     public int currentHealth
     {
         get;
         private set;
     }
+
+    public int maxHealth;
 
     private void Start()
     {

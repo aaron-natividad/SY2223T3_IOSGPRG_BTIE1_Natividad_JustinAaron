@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour
 {
+    [Header("Roaming Parameters")]
     public Vector2 roamCenter;
     public float roamRadius;
     public float roamInterval;
@@ -18,6 +19,7 @@ public class AIController : MonoBehaviour
         StartCoroutine(MoveRandom());
     }
 
+    // Temporary coroutine to test roaming with nav mesh
     private IEnumerator MoveRandom()
     {
         Vector2 movePos = Vector2.zero;
