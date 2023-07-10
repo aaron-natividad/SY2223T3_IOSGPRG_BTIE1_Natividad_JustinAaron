@@ -7,6 +7,9 @@ public class InventoryComponent : MonoBehaviour
     public delegate void AmmoChangeDelegate(int pistolAmmo, int machinegunAmmo, int shotgunAmmo);
     public AmmoChangeDelegate OnAmmoChange;
 
+    public delegate void AddGunDelegate(Gun primaryGun, Gun secondaryGun);
+    public AddGunDelegate OnAddGun;
+
     [SerializeField] private Transform gunPosition;
     [Space(10)]
     [SerializeField] private int maxPistolAmmo;
@@ -74,8 +77,7 @@ public class InventoryComponent : MonoBehaviour
             secondaryGun = newGun;
         }
 
-        UIManager.instance.primaryFrame.SetFrameInfo(primaryGun, secondaryGun);
-        UIManager.instance.secondaryFrame.SetFrameInfo(secondaryGun, primaryGun);
+        OnAddGun?.Invoke(primaryGun, secondaryGun);
         SetEquippedGun(equippedPrimary);
     }
 

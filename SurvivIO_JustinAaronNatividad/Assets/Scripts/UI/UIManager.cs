@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
         if (inventory != null)
         {
             inventory.OnAmmoChange += UpdateAmmo;
+            inventory.OnAddGun += UpdateGunUI;
         }
     }
 
@@ -47,6 +48,7 @@ public class UIManager : MonoBehaviour
         if (inventory != null)
         {
             inventory.OnAmmoChange -= UpdateAmmo;
+            inventory.OnAddGun -= UpdateGunUI;
         }
     }
 
@@ -71,6 +73,13 @@ public class UIManager : MonoBehaviour
         pistolAmmoText.text = pistolAmmo.ToString("000");
         machinegunAmmoText.text = machinegunAmmo.ToString("000");
         shotgunAmmoText.text = shotgunAmmo.ToString("000");
+    }
+
+    public void UpdateGunUI(Gun primaryGun, Gun secondaryGun)
+    {
+        primaryFrame.SetFrameInfo(primaryGun, secondaryGun);
+        secondaryFrame.SetFrameInfo(secondaryGun, primaryGun);
+        clipText.text = inventory.GetEquippedGun().GetClipInfo();
     }
 
     public void UpdateClipUI(string message)
