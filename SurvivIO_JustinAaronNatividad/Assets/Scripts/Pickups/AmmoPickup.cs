@@ -16,7 +16,7 @@ public class AmmoPickup : Pickup
         }
 
         int ammoAmount = Random.Range(minAmmoAmount,maxAmmoAmount + 1);
-        unitInventory.AddAmmo(type, ammoAmount);
+        unitInventory.ModifyAmmo(type, ammoAmount);
         Destroy(gameObject);
     }
 }

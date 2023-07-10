@@ -10,13 +10,8 @@ public class HealthComponent : MonoBehaviour
     public delegate void DeathDelegate();
     public DeathDelegate OnDeath;
 
-    public int currentHealth
-    {
-        get;
-        private set;
-    }
-
-    public int maxHealth;
+    [SerializeField] private int maxHealth;
+    private int currentHealth;
 
     private void Start()
     {

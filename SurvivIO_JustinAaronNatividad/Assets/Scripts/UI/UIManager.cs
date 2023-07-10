@@ -6,15 +6,19 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager instance;
     public GameObject unit;
 
     [Header("UI Components")]
     public Image healthbar;
+    public TextMeshProUGUI clipText;
+    [Space(10)]
     public TextMeshProUGUI pistolAmmoText;
     public TextMeshProUGUI machinegunAmmoText;
     public TextMeshProUGUI shotgunAmmoText;
-    public GameObject primaryFrame;
-    public GameObject secondaryFrame;
+    [Space(10)]
+    public Frame primaryFrame;
+    public Frame secondaryFrame;
 
     private HealthComponent health;
     private InventoryComponent inventory;
@@ -46,6 +50,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
         GetUnitComponents();
@@ -64,6 +73,11 @@ public class UIManager : MonoBehaviour
         shotgunAmmoText.text = shotgunAmmo.ToString("000");
     }
 
+    public void UpdateClipUI(string message)
+    {
+        clipText.text = message;
+    }
+
     public void ForceUpdateUI()
     {
         if (unit == null)
@@ -72,13 +86,15 @@ public class UIManager : MonoBehaviour
         }
 
         UpdateHealth(health.GetHealthPercentage());
-        UpdateAmmo(inventory.pistolAmmo, inventory.machinegunAmmo, inventory.shotgunAmmo);
+        UpdateAmmo(inventory.GetAmmo(AmmoType.PistolAmmo), inventory.GetAmmo(AmmoType.MachineGunAmmo), inventory.GetAmmo(AmmoType.ShotgunAmmo));
     }
 
     public void SwapWeaponUI()
     {
-        primaryFrame.SetActive(!primaryFrame.activeSelf);
-        secondaryFrame.SetActive(!secondaryFrame.activeSelf);
+        primaryFrame.gameObject.SetActive(!primaryFrame.gameObject.activeSelf);
+        secondaryFrame.gameObject.SetActive(!secondaryFrame.gameObject.activeSelf);
+        clipText.text = inventory.GetEquippedGun().GetClipInfo();
+        inventory.GetEquippedGun().OnClipChange = UpdateClipUI;
     }
 
     public void GetUnitComponents()

@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Joysticks")]
-    public Joystick movementJoystick;
-    public Joystick aimJoystick;
+    [SerializeField] private Joystick movementJoystick;
+    [SerializeField] private Joystick aimJoystick;
 
     private MovementComponent movementComponent;
     private AimComponent aimComponent;
