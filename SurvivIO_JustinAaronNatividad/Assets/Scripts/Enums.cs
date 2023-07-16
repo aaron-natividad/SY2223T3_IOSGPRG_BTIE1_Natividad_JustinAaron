@@ -4,3 +4,9 @@ public enum AmmoType
     MachineGunAmmo, //5.56 mm
     ShotgunAmmo     //12 gauge
 }
+
+public enum EnemyState
+{
+    Patrol,
+    Shooting
+}

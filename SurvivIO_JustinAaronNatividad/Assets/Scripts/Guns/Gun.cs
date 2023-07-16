@@ -7,25 +7,29 @@ public class Gun : MonoBehaviour
     public delegate void ClipChangeDelegate(string message);
     public ClipChangeDelegate OnClipChange;
 
+    [Header("Components")]
     public InventoryComponent inventory;
-    public Transform bulletSpawn;
+    [SerializeField] private Transform bulletSpawn;
 
-    [Header("Gun Parameters")]
+    [Header("Gun Data")]
     public string gunName;
     public Sprite gunIcon;
-    [Space(10)]
+
+    [Header("Bullet")]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private AmmoType bulletType;
     [SerializeField] private int bulletDamage;
     [SerializeField] private float bulletSpeed;
     [SerializeField] private float bulletSpread;
     [SerializeField] private int bulletCount;
-    [Space(10)]
+
+    [Header("Reload Parameters")]
     [SerializeField] private int clipCapacity;
     [SerializeField] private float reloadTime;
-    [Space(10)]
+
+    [Header("Fire Rate")]
     [SerializeField] private float fireRate;
-    [SerializeField] private bool isAutomatic;
+    public bool isAutomatic;
 
     protected int currentClip = 0;
     protected float fireCooldown = 0;
@@ -38,6 +42,7 @@ public class Gun : MonoBehaviour
         OnClipChange = null;
     }
 
+    // Function to be hooked to aim component
     public void Fire(bool isFiring)
     {
         if (isReloading)
@@ -97,9 +102,18 @@ public class Gun : MonoBehaviour
 
     private void TryReload()
     {
-        if(currentClip <= 0 && inventory.GetAmmo(bulletType) > 0)
+        int reloadAmount;
+        if(currentClip <= 0 && (inventory.GetAmmo(bulletType) > 0 ||  inventory.infiniteAmmo))
         {
-            int reloadAmount = inventory.GetAmmo(bulletType) >= clipCapacity ? clipCapacity : inventory.GetAmmo(bulletType);
+            if (inventory.infiniteAmmo || inventory.GetAmmo(bulletType) >= clipCapacity)
+            {
+                reloadAmount = clipCapacity;
+            }
+            else
+            {
+                reloadAmount = inventory.GetAmmo(bulletType);
+            }
+            
             reloadCoroutine = StartCoroutine(CO_Reload(reloadAmount));
         }
     }
@@ -109,7 +123,7 @@ public class Gun : MonoBehaviour
         OnClipChange?.Invoke("Reloading...");
         isReloading = true;
 
-        yield return new WaitForSeconds(reloadTime);
+        yield return new WaitForSeconds(reloadTime * inventory.reloadTimeMultiplier);
         isReloading = false;
         inventory.ModifyAmmo(bulletType, -amount);
         currentClip = amount;

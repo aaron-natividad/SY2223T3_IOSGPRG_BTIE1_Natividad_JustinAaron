@@ -8,25 +8,25 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Joystick movementJoystick;
     [SerializeField] private Joystick aimJoystick;
 
-    private MovementComponent movementComponent;
-    private AimComponent aimComponent;
+    private MovementComponent movement;
+    private AimComponent aiming;
 
     private void Start()
     {
-        movementComponent = GetComponent<MovementComponent>();
-        aimComponent = GetComponent<AimComponent>();
+        movement = GetComponent<MovementComponent>();
+        aiming = GetComponent<AimComponent>();
     }
 
     private void FixedUpdate()
     {
         if(movementJoystick.Direction != Vector2.zero)
         {
-            movementComponent.MoveUnit(movementJoystick.Direction);
+            movement.MoveUnit(movementJoystick.Direction);
         }
 
         if (aimJoystick.Direction != Vector2.zero)
         {
-            aimComponent.AimUnit(aimJoystick.Direction.normalized);
+            aiming.AimUnit(aimJoystick.Direction.normalized);
         }
     }
 }

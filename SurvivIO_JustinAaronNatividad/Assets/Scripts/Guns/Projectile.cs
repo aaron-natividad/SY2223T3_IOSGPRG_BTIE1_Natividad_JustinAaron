@@ -6,21 +6,18 @@ public class Projectile : MonoBehaviour
 {
     // Temporary code for projectile for gun testing
     [SerializeField] private float bulletSpeed;
+    [SerializeField] private float maxBulletLife;
 
-    private void Start()
-    {
-        // Temporarily destroy projectiles after 2 seconds to prevent lag
-        Destroy(gameObject, 2f);
-    }
+    private Rigidbody2D rigidBody;
 
     public void Initialize(float bSpeed)
     {
         bulletSpeed = bSpeed;
-    }
+        rigidBody = GetComponent<Rigidbody2D>();
+        rigidBody.velocity = transform.up.normalized * bulletSpeed;
 
-    private void FixedUpdate()
-    {
-        transform.position += transform.up * bulletSpeed;
+        // Temporarily destroy projectiles after 2 seconds to prevent lag
+        Destroy(gameObject, maxBulletLife);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

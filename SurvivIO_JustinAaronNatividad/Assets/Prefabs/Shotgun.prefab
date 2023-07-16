@@ -137,7 +137,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 8166502064577487136, guid: 7ac76df70be11d54592d530c32b3d38f, type: 3}
   bulletType: 2
   bulletDamage: 10
-  bulletSpeed: 0.2
+  bulletSpeed: 10
   bulletSpread: 20
   bulletCount: 8
   clipCapacity: 2

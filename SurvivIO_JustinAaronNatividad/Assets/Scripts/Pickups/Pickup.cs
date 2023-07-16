@@ -11,7 +11,10 @@ public abstract class Pickup : MonoBehaviour
         if (collision.GetComponent<InventoryComponent>())
         {
             unitInventory = collision.GetComponent<InventoryComponent>();
-            DoPickup();
+            if (unitInventory.canLoot)
+            {
+                DoPickup();
+            }
         }
     }
 

@@ -7,14 +7,18 @@ public class InventoryComponent : MonoBehaviour
     public delegate void AmmoChangeDelegate(int pistolAmmo, int machinegunAmmo, int shotgunAmmo);
     public AmmoChangeDelegate OnAmmoChange;
 
-    public delegate void AddGunDelegate(Gun primaryGun, Gun secondaryGun);
-    public AddGunDelegate OnAddGun;
+    public delegate void ChangeGunDelegate(Gun primaryGun, Gun secondaryGun);
+    public ChangeGunDelegate OnChangeGun;
 
     [SerializeField] private Transform gunPosition;
     [Space(10)]
     [SerializeField] private int maxPistolAmmo;
     [SerializeField] private int maxMachineGunAmmo;
     [SerializeField] private int maxShotgunAmmo;
+    [Space(10)]
+    public float reloadTimeMultiplier;
+    public bool infiniteAmmo;
+    public bool canLoot;
 
     private Gun primaryGun;
     private Gun secondaryGun;
@@ -38,6 +42,11 @@ public class InventoryComponent : MonoBehaviour
         else if (type == AmmoType.ShotgunAmmo)
         {
             shotgunAmmo = Mathf.Clamp(shotgunAmmo + amount, 0, maxShotgunAmmo);
+        }
+
+        if (GetEquippedGun() != null)
+        {
+            GetEquippedGun().GetClipInfo();
         }
 
         OnAmmoChange?.Invoke(pistolAmmo, machinegunAmmo, shotgunAmmo);
@@ -77,7 +86,7 @@ public class InventoryComponent : MonoBehaviour
             secondaryGun = newGun;
         }
 
-        OnAddGun?.Invoke(primaryGun, secondaryGun);
+        OnChangeGun?.Invoke(primaryGun, secondaryGun);
         SetEquippedGun(equippedPrimary);
     }
 
@@ -161,5 +170,7 @@ public class InventoryComponent : MonoBehaviour
         {
             secondaryGun.gameObject.SetActive(!equippedPrimary);
         }
+
+        OnChangeGun?.Invoke(primaryGun, secondaryGun);
     }
 }
