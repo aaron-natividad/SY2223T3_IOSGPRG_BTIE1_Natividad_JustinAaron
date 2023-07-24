@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6194559569059324527}
   - component: {fileID: 6194559569059324526}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6194559570118505130}
   - component: {fileID: 6194559570118505131}
   - component: {fileID: 6194559570118505125}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PistolAmmoPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}

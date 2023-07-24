@@ -1,22 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class PickupSpawner : MonoBehaviour
+public class PickupSpawner : Spawner
 {
-    [SerializeField] private GameObject[] pickups;
-    [SerializeField] private Vector2 minBounds;
-    [SerializeField] private Vector2 maxBounds;
-    [SerializeField] private int spawnAmount;
+    [Header("Pickup Spawner")]
+    [SerializeField] private GameObject[] gunPickups;
+    [SerializeField] private GameObject[] ammoPickups;
 
-    void Start()
+    [SerializeField] private float gunSpawnWeight;
+
+    protected override void SpawnPrefab(Vector3 spawnPosition)
     {
-        for(int i = 0; i < spawnAmount; i++)
+        GameObject[] pickupArray = GetPickupArray();
+        int index = Random.Range(0, pickupArray.Length);
+        Instantiate(pickupArray[index], spawnPosition, Quaternion.identity);
+    }
+
+    private GameObject[] GetPickupArray()
+    {
+        float weight = Random.Range(0f, 1f);
+
+        if (weight <= gunSpawnWeight)
         {
-            int index = Random.Range(0, pickups.Length);
-            float spawnX = Random.Range(minBounds.x, maxBounds.x);
-            float spawnY = Random.Range(minBounds.y, maxBounds.y);
-            Instantiate(pickups[index], new Vector3(spawnX, spawnY, 0), Quaternion.identity);
+            return gunPickups;
+        }
+        else
+        {
+            return ammoPickups;
         }
     }
 }

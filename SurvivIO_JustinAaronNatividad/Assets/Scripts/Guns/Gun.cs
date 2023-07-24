@@ -14,12 +14,16 @@ public class Gun : MonoBehaviour
     [Header("Gun Data")]
     public string gunName;
     public Sprite gunIcon;
+    public GunType gunType;
+    public AmmoType ammoType;
+
+    [Header("Fire Rate")]
+    public float fireRate;
+    public bool isAutomatic;
 
     [Header("Bullet")]
     [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private AmmoType bulletType;
     [SerializeField] private int bulletDamage;
-    [SerializeField] private float bulletSpeed;
     [SerializeField] private float bulletSpread;
     [SerializeField] private int bulletCount;
 
@@ -27,22 +31,16 @@ public class Gun : MonoBehaviour
     [SerializeField] private int clipCapacity;
     [SerializeField] private float reloadTime;
 
-    [Header("Fire Rate")]
-    [SerializeField] private float fireRate;
-    public bool isAutomatic;
-
+    [HideInInspector] public bool isReloading = false;
     protected int currentClip = 0;
     protected float fireCooldown = 0;
-    protected bool semiAutoFlag = false;
-    protected bool isReloading = false;
-    protected Coroutine reloadCoroutine;
+    protected bool hasFired = false;
 
     private void OnDisable()
     {
         OnClipChange = null;
     }
 
-    // Function to be hooked to aim component
     public void Fire(bool isFiring)
     {
         if (isReloading)
@@ -64,21 +62,21 @@ public class Gun : MonoBehaviour
         }
         else
         {
-            if (semiAutoFlag == false && isFiring)
+            if (hasFired == false && isFiring)
             {
-                semiAutoFlag = true;
+                hasFired = true;
                 TrySpawnBullet();
             }
             else if (!isFiring)
             {
-                semiAutoFlag = false;
+                hasFired = false;
             }
         }
     }
 
     public string GetClipInfo()
     {
-        return "Clip: " + currentClip + "/" + inventory.GetAmmo(bulletType);
+        return "Clip: " + currentClip + "/" + inventory.GetAmmo(ammoType);
     }
 
     private void TrySpawnBullet()
@@ -92,10 +90,10 @@ public class Gun : MonoBehaviour
 
             for (int i = 0; i < bulletCount; i++)
             {
-                float randomSpread = Random.Range(-bulletSpread, bulletSpread);
-                Projectile p = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation).GetComponent<Projectile>();
-                p.transform.Rotate(new Vector3(0, 0, randomSpread));
-                p.Initialize(bulletSpeed);
+                float randomSpread = Random.Range(-bulletSpread/2, bulletSpread/2);
+                Projectile spawnedProjectile = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation).GetComponent<Projectile>();
+                spawnedProjectile.transform.Rotate(new Vector3(0, 0, randomSpread));
+                spawnedProjectile.Initialize(bulletDamage);
             }
         }
     }
@@ -103,18 +101,18 @@ public class Gun : MonoBehaviour
     private void TryReload()
     {
         int reloadAmount;
-        if(currentClip <= 0 && (inventory.GetAmmo(bulletType) > 0 ||  inventory.infiniteAmmo))
+        if(currentClip <= 0 && (inventory.GetAmmo(ammoType) > 0 ||  inventory.infiniteAmmo))
         {
-            if (inventory.infiniteAmmo || inventory.GetAmmo(bulletType) >= clipCapacity)
+            if (inventory.infiniteAmmo || inventory.GetAmmo(ammoType) >= clipCapacity)
             {
                 reloadAmount = clipCapacity;
             }
             else
             {
-                reloadAmount = inventory.GetAmmo(bulletType);
+                reloadAmount = inventory.GetAmmo(ammoType);
             }
             
-            reloadCoroutine = StartCoroutine(CO_Reload(reloadAmount));
+            StartCoroutine(CO_Reload(reloadAmount));
         }
     }
 
@@ -125,9 +123,8 @@ public class Gun : MonoBehaviour
 
         yield return new WaitForSeconds(reloadTime * inventory.reloadTimeMultiplier);
         isReloading = false;
-        inventory.ModifyAmmo(bulletType, -amount);
+        inventory.ModifyAmmo(ammoType, -amount);
         currentClip = amount;
         OnClipChange?.Invoke(GetClipInfo());
-        reloadCoroutine = null;
     }
 }

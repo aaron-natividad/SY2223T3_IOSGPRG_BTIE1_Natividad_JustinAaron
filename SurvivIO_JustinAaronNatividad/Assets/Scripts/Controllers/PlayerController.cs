@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(movementJoystick.Direction != Vector2.zero)
+        if (movementJoystick.Direction != Vector2.zero)
         {
             movement.MoveUnit(movementJoystick.Direction);
         }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5716232807044819473}
   - component: {fileID: 5716232807044819474}
   - component: {fileID: 5716232807044819475}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ShotgunPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,7 +64,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunPrefab: {fileID: 7589428314426515437, guid: 872e933808258b347a21e3e58fd200ba, type: 3}
-  gunName: Shotgun
+  minAmmoAmount: 1
+  maxAmmoAmount: 2
 --- !u!1 &5716232807070027552
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,7 +76,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5716232807070027559}
   - component: {fileID: 5716232807070027558}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GunIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5716232807289546077}
   - component: {fileID: 5716232807289546076}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

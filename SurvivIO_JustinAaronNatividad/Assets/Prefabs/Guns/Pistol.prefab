@@ -133,16 +133,16 @@ MonoBehaviour:
   inventory: {fileID: 0}
   bulletSpawn: {fileID: 4469794706951499613}
   gunName: Pistol
+  gunType: 1
   gunIcon: {fileID: 21300000, guid: 0bc357a325f162a4a927b0aef6670cb0, type: 3}
   bulletPrefab: {fileID: 8166502064577487136, guid: 7ac76df70be11d54592d530c32b3d38f, type: 3}
   bulletType: 0
   bulletDamage: 10
-  bulletSpeed: 10
-  bulletSpread: 5
+  bulletSpread: 1.2
   bulletCount: 1
   clipCapacity: 15
-  reloadTime: 1
-  fireRate: 0.1
+  reloadTime: 2
+  fireRate: 2.16
   isAutomatic: 0
 --- !u!1 &9158401485526643268
 GameObject:

@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class UnitDetection : MonoBehaviour
 {
-    [HideInInspector] public List<GameObject> units = new List<GameObject>();
-
-    [SerializeField] private AIController controller;
+    private List<GameObject> unitsInRange = new List<GameObject>();
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.GetComponent<HealthComponent>())
         {
-            units.Add(collision.gameObject);
-            controller.SetEnemyState(EnemyState.Shooting);
+            unitsInRange.Add(collision.gameObject);
         }
     }
 
@@ -21,11 +18,17 @@ public class UnitDetection : MonoBehaviour
     {
         if (collision.GetComponent<HealthComponent>()) 
         {
-            units.Remove(collision.gameObject);
-            if (units.Count <= 0)
-            {
-                controller.SetEnemyState(EnemyState.Patrol);
-            }
+            unitsInRange.Remove(collision.gameObject);
         }
+    }
+
+    public bool HasUnitsInRange()
+    {
+        return unitsInRange.Count > 0;
+    }
+
+    public GameObject GetFirstUnit()
+    {
+        return unitsInRange[0];
     }
 }

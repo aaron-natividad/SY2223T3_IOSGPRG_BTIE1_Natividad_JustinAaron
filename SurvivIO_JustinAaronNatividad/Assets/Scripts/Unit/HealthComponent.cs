@@ -7,7 +7,7 @@ public class HealthComponent : MonoBehaviour
     public delegate void HealthChangeDelegate(float healthPercentage);
     public HealthChangeDelegate OnHealthChange;
 
-    public delegate void DeathDelegate();
+    public delegate void DeathDelegate(GameObject unit);
     public DeathDelegate OnDeath;
 
     [SerializeField] private int maxHealth;
@@ -31,12 +31,13 @@ public class HealthComponent : MonoBehaviour
         OnHealthChange?.Invoke(GetHealthPercentage());
         if (currentHealth <= 0)
         {
-            OnDeath?.Invoke();
+            OnDeath?.Invoke(gameObject);
+            Destroy(gameObject);
         }
     }
 
     public float GetHealthPercentage()
     {
-        return currentHealth / maxHealth;
+        return (float)currentHealth / maxHealth;
     }
 }

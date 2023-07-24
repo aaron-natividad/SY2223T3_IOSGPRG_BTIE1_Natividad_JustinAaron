@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4578282997868400440}
   - component: {fileID: 4578282997868400439}
   - component: {fileID: 4578282997868400438}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MachineGunAmmoPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4578282998170130710}
   - component: {fileID: 4578282998170130711}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -134,16 +134,16 @@ MonoBehaviour:
   bulletSpawn: {fileID: 4469794706951499613}
   gunName: Machine Gun
   gunIcon: {fileID: 21300000, guid: 535803775cfebaf4ba78f58d9bc620d0, type: 3}
+  gunType: 0
+  ammoType: 1
+  fireRate: 0.35
+  isAutomatic: 1
   bulletPrefab: {fileID: 8166502064577487136, guid: 7ac76df70be11d54592d530c32b3d38f, type: 3}
-  bulletType: 1
-  bulletDamage: 10
-  bulletSpeed: 10
-  bulletSpread: 10
+  bulletDamage: 15
+  bulletSpread: 1.1
   bulletCount: 1
   clipCapacity: 30
-  reloadTime: 1
-  fireRate: 0.1
-  isAutomatic: 1
+  reloadTime: 2.3
 --- !u!1 &9158401485526643268
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,72 +4,30 @@ using UnityEngine;
 
 public class InventoryComponent : MonoBehaviour
 {
-    public delegate void AmmoChangeDelegate(int pistolAmmo, int machinegunAmmo, int shotgunAmmo);
-    public AmmoChangeDelegate OnAmmoChange;
+    public delegate void AmmoUpdateDelegate(int[] ammo);
+    public AmmoUpdateDelegate OnAmmoUpdate;
 
-    public delegate void ChangeGunDelegate(Gun primaryGun, Gun secondaryGun);
-    public ChangeGunDelegate OnChangeGun;
+    public delegate void GunUpdateDelegate(Gun[] guns, GunType equippedType);
+    public GunUpdateDelegate OnGunUpdate;
 
     [SerializeField] private Transform gunPosition;
     [Space(10)]
-    [SerializeField] private int maxPistolAmmo;
-    [SerializeField] private int maxMachineGunAmmo;
-    [SerializeField] private int maxShotgunAmmo;
+    [SerializeField] private int[] maxAmmo;
     [Space(10)]
     public float reloadTimeMultiplier;
     public bool infiniteAmmo;
     public bool canLoot;
 
-    private Gun primaryGun;
-    private Gun secondaryGun;
+    private Gun[] gunSlot = new Gun[2] { null, null };
+    private int[] ammo = new int[3] { 0, 0, 0 };
 
-    private int pistolAmmo = 0;
-    private int machinegunAmmo = 0;
-    private int shotgunAmmo = 0;
+    private GunType equippedType = GunType.Primary;
 
-    private bool equippedPrimary = true;
-
+    #region Public Methods
     public void ModifyAmmo(AmmoType type, int amount)
     {
-        if (type == AmmoType.PistolAmmo)
-        {
-            pistolAmmo = Mathf.Clamp(pistolAmmo + amount, 0, maxPistolAmmo);
-        }
-        else if (type == AmmoType.MachineGunAmmo)
-        {
-            machinegunAmmo = Mathf.Clamp(machinegunAmmo + amount, 0, maxMachineGunAmmo);
-        }
-        else if (type == AmmoType.ShotgunAmmo)
-        {
-            shotgunAmmo = Mathf.Clamp(shotgunAmmo + amount, 0, maxShotgunAmmo);
-        }
-
-        if (GetEquippedGun() != null)
-        {
-            GetEquippedGun().GetClipInfo();
-        }
-
-        OnAmmoChange?.Invoke(pistolAmmo, machinegunAmmo, shotgunAmmo);
-    }
-
-    public int GetAmmo(AmmoType type)
-    {
-        if (type == AmmoType.PistolAmmo)
-        {
-            return pistolAmmo;
-        }
-        else if (type == AmmoType.MachineGunAmmo)
-        {
-            return machinegunAmmo;
-        }
-        else if (type == AmmoType.ShotgunAmmo)
-        {
-            return shotgunAmmo;
-        }
-        else
-        {
-            return -1;
-        }
+        ammo[(int)type] = Mathf.Clamp(ammo[(int)type] + amount, 0, maxAmmo[(int)type]);
+        OnAmmoUpdate?.Invoke(ammo);
     }
 
     public void AddGun(GameObject gunPrefab)
@@ -77,100 +35,86 @@ public class InventoryComponent : MonoBehaviour
         Gun newGun = Instantiate(gunPrefab, gunPosition).GetComponent<Gun>();
         newGun.inventory = this;
 
-        if (primaryGun == null)
+        if (gunSlot[(int)newGun.gunType] != null)
         {
-            primaryGun = newGun;
+            Destroy(gunSlot[(int)newGun.gunType].gameObject);
         }
-        else if (secondaryGun == null)
-        {
-            secondaryGun = newGun;
-        }
+        gunSlot[(int)newGun.gunType] = newGun;
 
-        OnChangeGun?.Invoke(primaryGun, secondaryGun);
-        SetEquippedGun(equippedPrimary);
-    }
-
-    public Gun GetEquippedGun()
-    {
-        if (equippedPrimary)
-        {
-            return primaryGun;
-        }
-        else
-        {
-            return secondaryGun;
-        }
+        OnGunUpdate?.Invoke(gunSlot, equippedType);
+        SetEquippedGun(equippedType);
     }
 
     public void SwapWeapon()
     {
-        if (equippedPrimary)
+        if (GetEquippedGun() != null)
         {
-            if (secondaryGun != null)
+            if (GetEquippedGun().isReloading)
             {
-                SetEquippedGun(false);
-                UIManager.instance.SwapWeaponUI();
+                return;
+            }
+        }
+
+        if (equippedType == GunType.Primary)
+        {
+            if (gunSlot[1] != null)
+            {
+                SetEquippedGun(GunType.Secondary);
             }
         }
         else
         {
-            if (primaryGun != null)
+            if (gunSlot[0] != null)
             {
-                SetEquippedGun(true);
-                UIManager.instance.SwapWeaponUI();
+                SetEquippedGun(GunType.Primary);
             }
         }
+    }
+
+    public void SetEquippedGun(GunType type)
+    {
+        foreach (Gun gun in gunSlot)
+        {
+            if (gun != null)
+            {
+                gun.gameObject.SetActive(false);
+            }
+        }
+
+        if (gunSlot[(int)type] != null)
+        {
+            equippedType = type;
+            gunSlot[(int)type].gameObject.SetActive(true);
+        }
+
+        OnGunUpdate?.Invoke(gunSlot, equippedType);
     }
 
     public bool IsAmmoFull(AmmoType type)
     {
-        if (type == AmmoType.PistolAmmo)
-        {
-            return pistolAmmo >= maxPistolAmmo;
-        }
-        else if (type == AmmoType.MachineGunAmmo)
-        {
-            return machinegunAmmo >= maxMachineGunAmmo;
-        }
-        else if (type == AmmoType.ShotgunAmmo)
-        {
-            return shotgunAmmo >= maxShotgunAmmo;
-        }
-        else
-        {
-            return false;
-        }
+        return ammo[(int)type] >= maxAmmo[(int)type];
     }
+    #endregion
 
-    public bool IsValidGun(string gunName)
+    #region Getters
+    public int[] GetAmmoArray()
     {
-        if (primaryGun != null && secondaryGun != null)
-        {
-            return false;
-        }
-
-        if (primaryGun != null)
-        {
-            return primaryGun.gunName != gunName;
-        }
-
-        return true;
+        return ammo;
     }
 
-    private void SetEquippedGun(bool equippedPrimary)
+    public int GetAmmo(AmmoType type)
     {
-        this.equippedPrimary = equippedPrimary;
-
-        if (primaryGun != null)
-        {
-            primaryGun.gameObject.SetActive(equippedPrimary);
-        }
-        
-        if (secondaryGun != null)
-        {
-            secondaryGun.gameObject.SetActive(!equippedPrimary);
-        }
-
-        OnChangeGun?.Invoke(primaryGun, secondaryGun);
+        return ammo[(int)type];
     }
+
+    public Gun GetGun(GunType type)
+    {
+        return gunSlot[(int)type];
+    }
+
+    public Gun GetEquippedGun()
+    {
+        return gunSlot[(int)equippedType];
+    }
+    #endregion
 }

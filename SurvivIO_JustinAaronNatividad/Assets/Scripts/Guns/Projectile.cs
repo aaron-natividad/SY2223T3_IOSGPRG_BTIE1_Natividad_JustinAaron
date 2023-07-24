@@ -4,26 +4,30 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    // Temporary code for projectile for gun testing
-    [SerializeField] private float bulletSpeed;
+    [SerializeField] private float bulletSpeed = 10;
     [SerializeField] private float maxBulletLife;
 
     private Rigidbody2D rigidBody;
+    private int bulletDamage;
 
-    public void Initialize(float bSpeed)
+    public void Initialize(int bulletDamage)
     {
-        bulletSpeed = bSpeed;
         rigidBody = GetComponent<Rigidbody2D>();
         rigidBody.velocity = transform.up.normalized * bulletSpeed;
 
-        // Temporarily destroy projectiles after 2 seconds to prevent lag
+        this.bulletDamage = bulletDamage;
         Destroy(gameObject, maxBulletLife);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Obstacle") || collision.GetComponent<MovementComponent>())
+        if (collision.CompareTag("Obstacle"))
         {
+            Destroy(gameObject);
+        }
+        else if (collision.GetComponent<HealthComponent>())
+        {
+            collision.GetComponent<HealthComponent>().TakeDamage(bulletDamage);
             Destroy(gameObject);
         }
     }

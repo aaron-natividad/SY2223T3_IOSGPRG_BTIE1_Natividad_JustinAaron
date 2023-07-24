@@ -6,19 +6,14 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager instance;
     [SerializeField] private GameObject unit;
 
     [Header("UI Components")]
+    [SerializeField] private Canvas playerUI;
     [SerializeField] private Image healthbar;
     [SerializeField] private TextMeshProUGUI clipText;
-    [Space(10)]
-    [SerializeField] private TextMeshProUGUI pistolAmmoText;
-    [SerializeField] private TextMeshProUGUI machinegunAmmoText;
-    [SerializeField] private TextMeshProUGUI shotgunAmmoText;
-    [Space(10)]
-    [SerializeField] private Frame primaryFrame;
-    [SerializeField] private Frame secondaryFrame;
+    [SerializeField] private TextMeshProUGUI[] ammoText;
+    [SerializeField] private Frame[] gunFrames;
 
     private HealthComponent health;
     private InventoryComponent inventory;
@@ -29,13 +24,13 @@ public class UIManager : MonoBehaviour
         if (health != null)
         {
             health.OnHealthChange += UpdateHealth;
+            health.OnDeath += DisableUI;
         }
 
         if (inventory != null)
         {
-            inventory.OnAmmoChange += UpdateAmmo;
-            inventory.OnAmmoChange += UpdateClipUI;
-            inventory.OnChangeGun += UpdateGunUI;
+            inventory.OnAmmoUpdate += UpdateAmmo;
+            inventory.OnGunUpdate += UpdateGunUI;
         }
     }
 
@@ -44,19 +39,14 @@ public class UIManager : MonoBehaviour
         if (health != null)
         {
             health.OnHealthChange -= UpdateHealth;
+            health.OnDeath -= DisableUI;
         }
 
         if (inventory != null)
         {
-            inventory.OnAmmoChange -= UpdateAmmo;
-            inventory.OnAmmoChange -= UpdateClipUI;
-            inventory.OnChangeGun -= UpdateGunUI;
+            inventory.OnAmmoUpdate -= UpdateAmmo;
+            inventory.OnGunUpdate -= UpdateGunUI;
         }
-    }
-
-    private void Awake()
-    {
-        instance = this;
     }
 
     private void Start()
@@ -70,32 +60,41 @@ public class UIManager : MonoBehaviour
         healthbar.fillAmount = healthPercentage;
     }
 
-    public void UpdateAmmo(int pistolAmmo, int machinegunAmmo, int shotgunAmmo)
+    public void UpdateAmmo(int[] ammo)
     {
-        pistolAmmoText.text = pistolAmmo.ToString("000");
-        machinegunAmmoText.text = machinegunAmmo.ToString("000");
-        shotgunAmmoText.text = shotgunAmmo.ToString("000");
+        for(int i = 0; i < 3; i++)
+        {
+            ammoText[i].text = ammo[i].ToString("000");
+        }
+        UpdateClipUI();
     }
 
-    public void UpdateGunUI(Gun primaryGun, Gun secondaryGun)
+    public void UpdateGunUI(Gun[] guns, GunType equippedType)
     {
-        primaryFrame.SetFrameInfo(primaryGun, secondaryGun);
-        secondaryFrame.SetFrameInfo(secondaryGun, primaryGun);
-        inventory.GetEquippedGun().OnClipChange = UpdateClipUI;
-        clipText.text = inventory.GetEquippedGun().GetClipInfo();
+        for(int i = 0; i < 2; i++)
+        {
+            gunFrames[i].SetFrameInfo(guns[i], guns[(i + 1) % 2]);
+            gunFrames[i].gameObject.SetActive(i == (int)equippedType);
+        }
+
+        if (inventory.GetEquippedGun() != null)
+        {
+            inventory.GetEquippedGun().OnClipChange = UpdateClipUI;
+        }
+        UpdateClipUI();
+    }
+
+    public void UpdateClipUI()
+    {
+        if (inventory.GetEquippedGun() != null)
+        {
+            clipText.text = inventory.GetEquippedGun().GetClipInfo();
+        }
     }
 
     public void UpdateClipUI(string message)
     {
         clipText.text = message;
-    }
-
-    public void UpdateClipUI(int pistolAmmo = 0, int machinegunAmmo = 0, int shotgunAmmo = 0)
-    {
-        if(inventory.GetEquippedGun() != null)
-        {
-            clipText.text = inventory.GetEquippedGun().GetClipInfo();
-        }
     }
 
     public void ForceUpdateUI()
@@ -106,21 +105,18 @@ public class UIManager : MonoBehaviour
         }
 
         UpdateHealth(health.GetHealthPercentage());
-        UpdateAmmo(inventory.GetAmmo(AmmoType.PistolAmmo), inventory.GetAmmo(AmmoType.MachineGunAmmo), inventory.GetAmmo(AmmoType.ShotgunAmmo));
+        UpdateAmmo(inventory.GetAmmoArray());
         UpdateClipUI();
-    }
-
-    public void SwapWeaponUI()
-    {
-        primaryFrame.gameObject.SetActive(!primaryFrame.gameObject.activeSelf);
-        secondaryFrame.gameObject.SetActive(!secondaryFrame.gameObject.activeSelf);
-        clipText.text = inventory.GetEquippedGun().GetClipInfo();
-        inventory.GetEquippedGun().OnClipChange = UpdateClipUI;
     }
 
     public void GetUnitComponents()
     {
         health = unit.GetComponent<HealthComponent>();
         inventory = unit.GetComponent<InventoryComponent>();
+    }
+
+    public void DisableUI(GameObject unit)
+    {
+        playerUI.enabled = false;
     }
 }

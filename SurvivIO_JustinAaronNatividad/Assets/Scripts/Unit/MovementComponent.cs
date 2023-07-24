@@ -7,7 +7,6 @@ public class MovementComponent : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
 
-    // NavMeshAgent still included within movement component because Unit prefab is generic
     private Rigidbody2D rigidBody;
     private NavMeshAgent agent;
 
@@ -30,6 +29,12 @@ public class MovementComponent : MonoBehaviour
 
     public void MoveAgent(Vector2 movePosition)
     {
+        agent.isStopped = false;
         agent.SetDestination(new Vector3(movePosition.x, movePosition.y, transform.position.z));
+    }
+
+    public void StopAgent()
+    {
+        agent.isStopped = true;
     }
 }

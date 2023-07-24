@@ -4,97 +4,58 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour
 {
+    [Header("Ranges")]
+    public UnitDetection seekRange;
+    public UnitDetection destroyRange;
+
     [Header("Roaming Parameters")]
     [SerializeField] private float roamRadius;
     [SerializeField] private float roamInterval;
 
-    [Header("Aim Parameters")]
-    [SerializeField] private GameObject gunPrefab;
-    [SerializeField] private float semiAutoFireRate;
+    [Header("Guns")]
+    [SerializeField] private GameObject[] gunPrefabs;
 
     // Components
-    private MovementComponent movement;
-    private AimComponent aiming;
-    private InventoryComponent inventory;
-    private UnitDetection unitDetection;
+    [HideInInspector] public MovementComponent movement;
+    [HideInInspector] public AimComponent aiming;
+    [HideInInspector] public InventoryComponent inventory;
+
+    // States
+    [HideInInspector] public Wander wanderState;
+    [HideInInspector] public Seek seekState;
+    [HideInInspector] public Destroy destroyState;
 
     // Private Variables
-    private EnemyState state;
-    private Vector2 roamCenter;
+    private EnemyState currentState = null;
 
-    private void Start()
+    private void Awake()
     {
         movement = GetComponent<MovementComponent>();
         aiming = GetComponent<AimComponent>();
         inventory = GetComponent<InventoryComponent>();
-        unitDetection = GetComponentInChildren<UnitDetection>();
 
-        inventory.AddGun(gunPrefab);
-        roamCenter = new Vector2(transform.position.x, transform.position.y);
-        state = EnemyState.Patrol;
-
-        StartCoroutine(CO_Patrol());
+        wanderState = new Wander(this, roamRadius, roamInterval);
+        seekState = new Seek(this);
+        destroyState = new Destroy(this);
     }
 
-    public void SetEnemyState(EnemyState newState)
+    private void Start()
     {
-        state = newState;
-
-        if (state == EnemyState.Patrol)
-        {
-            StartCoroutine(CO_Patrol());
-        }
-        else if (state == EnemyState.Shooting)
-        {
-            StartCoroutine(CO_ShootFirstUnit());
-        }
+        int gunIndex = Random.Range(0, gunPrefabs.Length);
+        inventory.AddGun(gunPrefabs[gunIndex]);
+        inventory.SetEquippedGun(gunPrefabs[gunIndex].GetComponent<Gun>().gunType);
+        SetEnemyState(wanderState);
     }
 
-    private IEnumerator CO_Patrol()
+    private void FixedUpdate()
     {
-        Vector2 movePos = Vector2.zero;
-        yield return new WaitForSeconds(roamInterval);
-
-        while (state == EnemyState.Patrol)
-        {
-            movePos.x = Random.Range(-roamRadius, roamRadius);
-            movePos.y = Random.Range(-roamRadius, roamRadius);
-            movement.MoveAgent(roamCenter + movePos);
-            yield return new WaitForSeconds(roamInterval);
-        }
+        currentState?.OnFixedUpdate();
     }
 
-    private IEnumerator CO_ShootFirstUnit()
+    public void SetEnemyState(EnemyState state)
     {
-        float semiAutoTimer = semiAutoFireRate;
-
-        while (state == EnemyState.Shooting)
-        {
-            GameObject targetedUnit = unitDetection.units[0];
-            aiming.AimUnit(targetedUnit.transform.position - transform.position);
-
-            if (inventory.GetEquippedGun().isAutomatic)
-            {
-                // Held firing
-                aiming.SetIsFiring(true);
-            }
-            else
-            {
-                // Interruptable semi auto timer to emulate player firing
-                if (semiAutoTimer > 0)
-                {
-                    semiAutoTimer -= Time.deltaTime;
-                    aiming.SetIsFiring(false);
-                }
-                else
-                {
-                    semiAutoTimer = semiAutoFireRate;
-                    aiming.SetIsFiring(true);
-                }
-            }
-            yield return new WaitForFixedUpdate();
-        }
-
-        aiming.SetIsFiring(false);
+        currentState?.OnExit();
+        state.OnEnter();
+        currentState = state;
     }
 }

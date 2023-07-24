@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9202100541356562503}
   - component: {fileID: 9202100541356562496}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 9202100542174810720}
   - component: {fileID: 9202100542174810727}
   - component: {fileID: 9202100542174810726}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ShotgunAmmoPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}

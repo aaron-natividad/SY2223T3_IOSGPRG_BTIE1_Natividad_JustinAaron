@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 311529012034306119}
   - component: {fileID: 7443979727792619928}
   - component: {fileID: 5487234310615050739}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MachineGunPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,7 +64,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunPrefab: {fileID: 7589428314426515437, guid: 841d278a9d2175941b1e321b494b03d2, type: 3}
-  gunName: Machine Gun
+  minAmmoAmount: 5
+  maxAmmoAmount: 15
 --- !u!1 &8225877329440906356
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,7 +76,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5400413413604423997}
   - component: {fileID: 2720397133164790327}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GunIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1652751760191469543}
   - component: {fileID: 6459600832612062324}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

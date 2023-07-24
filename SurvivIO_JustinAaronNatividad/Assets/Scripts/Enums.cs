@@ -1,12 +1,12 @@
 public enum AmmoType
 {
-    PistolAmmo,     //9mm
-    MachineGunAmmo, //5.56 mm
-    ShotgunAmmo     //12 gauge
+    PistolAmmo = 0,     //9mm
+    MachineGunAmmo = 1, //5.56 mm
+    ShotgunAmmo = 2 //12 gauge
 }
 
-public enum EnemyState
+public enum GunType
 {
-    Patrol,
-    Shooting
+    Primary = 0,
+    Secondary = 1
 }

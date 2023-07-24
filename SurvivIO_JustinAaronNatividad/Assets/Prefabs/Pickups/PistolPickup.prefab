@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4913927877527749522}
   - component: {fileID: 4913927877527749523}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 4913927877832236389}
   - component: {fileID: 4913927877832236388}
   - component: {fileID: 4913927877832236391}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PistolPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunPrefab: {fileID: 7589428314426515437, guid: a7ebf32097e94d84eb174bcd55c6ec56, type: 3}
-  gunName: Pistol
+  minAmmoAmount: 1
+  maxAmmoAmount: 8
 --- !u!1 &4913927878736500709
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,7 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4913927878736500714}
   - component: {fileID: 4913927878736500715}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GunIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
