@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     public void Win()
     {
+        Time.timeScale = 0;
         ui.EnablePlayerUI(false);
         ui.EnableMessageUI(true);
         ui.ActivateMessagePanel("Win Panel");
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour
 
     public void Lose(GameObject unit)
     {
+        Time.timeScale = 0;
         ui.EnablePlayerUI(false);
         ui.EnableMessageUI(true);
         ui.ActivateMessagePanel("Lose Panel");
@@ -69,8 +71,16 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         ui.EnablePlayerUI(false);
         yield return new WaitForSecondsRealtime(0.5f);
+
         ui.FadeCover(false, 0.5f);
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        for(int i = 3; i > 0; i--)
+        {
+            ui.SetCountdown(i.ToString());
+            yield return new WaitForSecondsRealtime(1f);
+        }
+        
         Time.timeScale = 1;
         ui.EnableMessageUI(false);
         ui.EnablePlayerUI(true);

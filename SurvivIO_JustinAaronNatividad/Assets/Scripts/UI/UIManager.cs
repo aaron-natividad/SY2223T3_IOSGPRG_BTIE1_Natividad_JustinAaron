@@ -18,8 +18,9 @@ public class UIManager : MonoBehaviour
 
     [Header("Message UI Components")]
     [SerializeField] private Canvas messageUI;
-    [SerializeField] private GameObject winPanel;
-    [SerializeField] private GameObject losePanel;
+    [SerializeField] private GameObject[] messagePanels;
+    [SerializeField] private TextMeshProUGUI rankText;
+    [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private Image cover;
 
     private HealthComponent health;
@@ -108,7 +109,14 @@ public class UIManager : MonoBehaviour
 
     public void UpdateEnemyCount(int remainingEnemies)
     {
+        int rank = remainingEnemies + 1;
         enemyCountText.text = remainingEnemies.ToString() + " left";
+        rankText.text = "Rank #" + rank.ToString();
+    }
+
+    public void SetCountdown(string countMessage)
+    {
+        countdownText.text = countMessage;
     }
 
     public void ForceUpdateUI()
@@ -131,8 +139,10 @@ public class UIManager : MonoBehaviour
 
     public void ActivateMessagePanel(string panelName)
     {
-        winPanel.SetActive(winPanel.name == panelName);
-        losePanel.SetActive(losePanel.name == panelName);
+        foreach(GameObject panel in messagePanels)
+        {
+            panel.SetActive(panel.name == panelName);
+        }
     }
 
     public void EnablePlayerUI(bool isEnabled)
