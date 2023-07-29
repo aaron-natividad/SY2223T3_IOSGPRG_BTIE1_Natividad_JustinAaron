@@ -19,6 +19,7 @@ public class Spawner : MonoBehaviour
         {
             SpawnOnValidPoint();
         }
+        OnEnter();
     }
 
     protected void SpawnOnValidPoint()
@@ -37,6 +38,11 @@ public class Spawner : MonoBehaviour
                 spawnAvailable = true;
             }
         }
+    }
+
+    protected virtual void OnEnter()
+    {
+
     }
 
     protected virtual void SpawnPrefab(Vector3 spawnPosition)

@@ -8,12 +8,19 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject unit;
 
-    [Header("UI Components")]
+    [Header("Player UI Components")]
     [SerializeField] private Canvas playerUI;
     [SerializeField] private Image healthbar;
     [SerializeField] private TextMeshProUGUI clipText;
+    [SerializeField] private TextMeshProUGUI enemyCountText;
     [SerializeField] private TextMeshProUGUI[] ammoText;
     [SerializeField] private Frame[] gunFrames;
+
+    [Header("Message UI Components")]
+    [SerializeField] private Canvas messageUI;
+    [SerializeField] private GameObject winPanel;
+    [SerializeField] private GameObject losePanel;
+    [SerializeField] private Image cover;
 
     private HealthComponent health;
     private InventoryComponent inventory;
@@ -24,7 +31,6 @@ public class UIManager : MonoBehaviour
         if (health != null)
         {
             health.OnHealthChange += UpdateHealth;
-            health.OnDeath += DisableUI;
         }
 
         if (inventory != null)
@@ -32,6 +38,8 @@ public class UIManager : MonoBehaviour
             inventory.OnAmmoUpdate += UpdateAmmo;
             inventory.OnGunUpdate += UpdateGunUI;
         }
+
+        EnemySpawner.OnEnemyCountChanged += UpdateEnemyCount;
     }
 
     private void OnDisable()
@@ -39,7 +47,6 @@ public class UIManager : MonoBehaviour
         if (health != null)
         {
             health.OnHealthChange -= UpdateHealth;
-            health.OnDeath -= DisableUI;
         }
 
         if (inventory != null)
@@ -47,6 +54,8 @@ public class UIManager : MonoBehaviour
             inventory.OnAmmoUpdate -= UpdateAmmo;
             inventory.OnGunUpdate -= UpdateGunUI;
         }
+
+        EnemySpawner.OnEnemyCountChanged -= UpdateEnemyCount;
     }
 
     private void Start()
@@ -97,6 +106,11 @@ public class UIManager : MonoBehaviour
         clipText.text = message;
     }
 
+    public void UpdateEnemyCount(int remainingEnemies)
+    {
+        enemyCountText.text = remainingEnemies.ToString() + " left";
+    }
+
     public void ForceUpdateUI()
     {
         if (unit == null)
@@ -115,8 +129,25 @@ public class UIManager : MonoBehaviour
         inventory = unit.GetComponent<InventoryComponent>();
     }
 
-    public void DisableUI(GameObject unit)
+    public void ActivateMessagePanel(string panelName)
     {
-        playerUI.enabled = false;
+        winPanel.SetActive(winPanel.name == panelName);
+        losePanel.SetActive(losePanel.name == panelName);
+    }
+
+    public void EnablePlayerUI(bool isEnabled)
+    {
+        playerUI.enabled = isEnabled;
+    }
+
+    public void EnableMessageUI(bool isEnabled)
+    {
+        messageUI.enabled = isEnabled;
+    }
+
+    public void FadeCover(bool fadeIn, float fadeTime)
+    {
+        Color toColor = fadeIn ? Color.black : Color.clear;
+        LeanTween.color(cover.rectTransform, toColor, fadeTime).setIgnoreTimeScale(true);
     }
 }

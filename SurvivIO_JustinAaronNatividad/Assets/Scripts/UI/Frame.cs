@@ -15,6 +15,7 @@ public class Frame : MonoBehaviour
         if (main != null)
         {
             weaponIcon.sprite = main.gunIcon;
+            weaponIcon.color = Color.white;
             weapon.text = main.gunName;
         }
         

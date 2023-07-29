@@ -51,13 +51,13 @@ Material:
     m_Ints: []
     m_Floats:
     - Vector1_E05C56E6: 1
-    - _Alpha: 0.2
+    - _Alpha: 0.3
     - _EnableExternalAlpha: 0
     - _PixelValue: 20
     - _Rotation: 45
     m_Colors:
     - Color_3747CAD5: {r: 0.8207547, g: 0, b: 0, a: 1}
-    - _BoxSize: {r: 0.8, g: 0.8, b: 0, a: 0}
+    - _BoxSize: {r: 0.9, g: 0.85, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

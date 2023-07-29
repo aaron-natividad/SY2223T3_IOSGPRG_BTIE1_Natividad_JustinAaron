@@ -1,14 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryComponent : MonoBehaviour
 {
-    public delegate void AmmoUpdateDelegate(int[] ammo);
-    public AmmoUpdateDelegate OnAmmoUpdate;
-
-    public delegate void GunUpdateDelegate(Gun[] guns, GunType equippedType);
-    public GunUpdateDelegate OnGunUpdate;
+    public event Action<int[]> OnAmmoUpdate;
+    public event Action<Gun[], GunType> OnGunUpdate;
 
     [SerializeField] private Transform gunPosition;
     [Space(10)]
