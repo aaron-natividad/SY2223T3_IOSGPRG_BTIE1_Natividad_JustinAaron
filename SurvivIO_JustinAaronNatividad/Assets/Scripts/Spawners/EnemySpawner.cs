@@ -8,9 +8,11 @@ public class EnemySpawner : Spawner
     public static event Action<int> OnEnemyCountChanged;
     public static event Action OnEnemiesDepleted;
 
+    [Header("Enemy Spawner")]
     [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject bossPrefab;
+
     private List<GameObject> spawnedEnemies = new List<GameObject>();
-    //private int remainingEnemies;
 
     protected override void OnEnter()
     {
@@ -19,14 +21,15 @@ public class EnemySpawner : Spawner
 
     protected override void SpawnPrefab(Vector3 spawnPosition)
     {
-        GameObject spawnedUnit = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-        spawnedUnit.GetComponent<HealthComponent>().OnDeath = RemoveEnemyFromCount;
+        GameObject prefabToSpawn = spawnedCount == spawnAmount - 1 ? bossPrefab : enemyPrefab;
+
+        GameObject spawnedUnit = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
+        spawnedUnit.GetComponent<HealthComponent>().OnDeath += RemoveEnemyFromList;
         spawnedEnemies.Add(spawnedUnit);
     }
 
-    public void RemoveEnemyFromCount(GameObject enemy)
+    public void RemoveEnemyFromList(GameObject enemy)
     {
-        //remainingEnemies--;
         spawnedEnemies.Remove(enemy);
         OnEnemyCountChanged?.Invoke(spawnedEnemies.Count);
 

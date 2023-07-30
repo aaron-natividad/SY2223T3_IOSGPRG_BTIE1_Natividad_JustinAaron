@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     [SerializeField] private GameObject unit;
+    [SerializeField] private GameObject rocketPickupPrefab;
 
     private UIManager ui;
     private HealthComponent unitHealth;
@@ -45,31 +46,33 @@ public class GameManager : MonoBehaviour
         StartCoroutine(CO_StartGame());
     }
 
-    public void Win()
-    {
-        Time.timeScale = 0;
-        ui.EnablePlayerUI(false);
-        ui.EnableMessageUI(true);
-        ui.ActivateMessagePanel("Win Panel");
-    }
-
-    public void Lose(GameObject unit)
-    {
-        Time.timeScale = 0;
-        ui.EnablePlayerUI(false);
-        ui.EnableMessageUI(true);
-        ui.ActivateMessagePanel("Lose Panel");
-    }
-
     public void LoadScene(string sceneName)
     {
         StartCoroutine(CO_LoadScene(sceneName));
     }
 
+    public void DropGrenadeLauncher(GameObject unit)
+    {
+        Debug.Log("Drop Spawned");
+        Instantiate(rocketPickupPrefab, unit.transform.position, Quaternion.identity);
+    }
+
+    private void Win()
+    {
+        Time.timeScale = 0;
+        ui.ActivateMessagePanel("Win Panel");
+    }
+
+    private void Lose(GameObject unit)
+    {
+        Time.timeScale = 0;
+        ui.ActivateMessagePanel("Lose Panel");
+    }
+
     private IEnumerator CO_StartGame()
     {
         Time.timeScale = 0;
-        ui.EnablePlayerUI(false);
+        ui.ActivateMessagePanel("Countdown Panel");
         yield return new WaitForSecondsRealtime(0.5f);
 
         ui.FadeCover(false, 0.5f);
@@ -82,8 +85,7 @@ public class GameManager : MonoBehaviour
         }
         
         Time.timeScale = 1;
-        ui.EnableMessageUI(false);
-        ui.EnablePlayerUI(true);
+        ui.EnablePlayerUI();
     }
 
     private IEnumerator CO_LoadScene(string sceneName)

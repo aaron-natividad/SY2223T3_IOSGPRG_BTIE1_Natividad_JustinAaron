@@ -1,14 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HealthComponent : MonoBehaviour
 {
-    public delegate void HealthChangeDelegate(float healthPercentage);
-    public HealthChangeDelegate OnHealthChange;
-
-    public delegate void DeathDelegate(GameObject unit);
-    public DeathDelegate OnDeath;
+    public event Action<float> OnHealthChange;
+    public event Action<GameObject> OnDeath;
 
     [SerializeField] private int maxHealth;
     private int currentHealth;

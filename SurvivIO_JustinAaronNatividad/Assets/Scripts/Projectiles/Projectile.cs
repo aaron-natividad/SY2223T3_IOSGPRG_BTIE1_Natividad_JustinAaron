@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float bulletSpeed = 10;
-    [SerializeField] private float maxBulletLife;
+    [Header("Projectile Parameters")]
+    [SerializeField] protected float bulletSpeed = 10;
+    [SerializeField] protected float maxBulletLife;
 
-    private Rigidbody2D rigidBody;
-    private int bulletDamage;
+    protected Rigidbody2D rigidBody;
+    protected int bulletDamage;
 
     public void Initialize(int bulletDamage)
     {
@@ -23,12 +24,23 @@ public class Projectile : MonoBehaviour
     {
         if (collision.CompareTag("Obstacle"))
         {
+            OnObstacleHit();
             Destroy(gameObject);
         }
         else if (collision.GetComponent<HealthComponent>())
         {
-            collision.GetComponent<HealthComponent>().TakeDamage(bulletDamage);
+            OnUnitHit(collision.GetComponent<HealthComponent>());
             Destroy(gameObject);
         }
+    }
+
+    protected virtual void OnObstacleHit()
+    {
+
+    }
+
+    protected virtual void OnUnitHit(HealthComponent health)
+    {
+
     }
 }

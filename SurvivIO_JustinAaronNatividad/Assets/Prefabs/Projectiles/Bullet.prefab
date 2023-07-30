@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9585120493159146}
-  - component: {fileID: -9003086553551350802}
+  - component: {fileID: 5073693843838292618}
   - component: {fileID: 2188929374068583142}
   - component: {fileID: 222932471072197117}
   - component: {fileID: -4809525960841372290}
   m_Layer: 0
-  m_Name: TempProjectile
+  m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +35,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-9003086553551350802
+--- !u!114 &5073693843838292618
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,11 +44,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8166502064577487136}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74e914ad74293f143849fba043035dd4, type: 3}
+  m_Script: {fileID: 11500000, guid: bf1c4d9f550cd654a97013e92bd775fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 10
+  bulletSpeed: 15
   maxBulletLife: 2
+  sparkParticle: {fileID: 3510258502265662281, guid: a43c5fa31d438a541a982b2671751037, type: 3}
+  bloodParticle: {fileID: 3510258502265662281, guid: acbda6a66af51174e9de34477991a653, type: 3}
 --- !u!212 &2188929374068583142
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -89,9 +91,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.74460334, b: 0.28773582, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

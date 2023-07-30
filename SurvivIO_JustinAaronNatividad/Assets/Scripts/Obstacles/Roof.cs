@@ -5,8 +5,9 @@ using UnityEngine;
 public class Roof : MonoBehaviour
 {
     [SerializeField] private float fadeTime;
+
     private List<GameObject> indoorUnits  = new List<GameObject>();
-    private bool visible = true;
+    private bool isVisible = true;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -14,7 +15,7 @@ public class Roof : MonoBehaviour
         {
             indoorUnits.Add(collision.gameObject);
         }
-        CheckVisible();
+        CheckVisibility();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -23,20 +24,20 @@ public class Roof : MonoBehaviour
         {
             indoorUnits.Remove(collision.gameObject);
         }
-        CheckVisible();
+        CheckVisibility();
     }
 
-    private void CheckVisible()
+    private void CheckVisibility()
     {
-        if (visible && indoorUnits.Count > 0)
+        if (isVisible && indoorUnits.Count > 0)
         {
             LeanTween.color(gameObject, Color.clear, fadeTime);
-            visible = false;
+            isVisible = false;
         }
-        else if (!visible && indoorUnits.Count <= 0)
+        else if (!isVisible && indoorUnits.Count <= 0)
         {
             LeanTween.color(gameObject, Color.white, fadeTime);
-            visible = true;
+            isVisible = true;
         }
     }
 }

@@ -1,14 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Gun : MonoBehaviour
 {
-    public delegate void ClipChangeDelegate(string message);
-    public ClipChangeDelegate OnClipChange;
+    public event Action<string> OnClipChange;
 
-    [Header("Components")]
-    public InventoryComponent inventory;
     [SerializeField] private Transform bulletSpawn;
 
     [Header("Gun Data")]
@@ -31,6 +30,7 @@ public class Gun : MonoBehaviour
     [SerializeField] private int clipCapacity;
     [SerializeField] private float reloadTime;
 
+    [HideInInspector] public InventoryComponent inventory;
     [HideInInspector] public bool isReloading = false;
     protected int currentClip = 0;
     protected float fireCooldown = 0;

@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 88897f1b923c465478875773dcbae7e9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -144,6 +144,7 @@ MonoBehaviour:
   bulletCount: 1
   clipCapacity: 30
   reloadTime: 2.3
+  isReloading: 0
 --- !u!1 &9158401485526643268
 GameObject:
   m_ObjectHideFlags: 0

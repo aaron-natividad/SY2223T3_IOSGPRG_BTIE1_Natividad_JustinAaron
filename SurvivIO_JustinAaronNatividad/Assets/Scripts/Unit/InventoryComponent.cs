@@ -17,7 +17,7 @@ public class InventoryComponent : MonoBehaviour
     public bool canLoot;
 
     private Gun[] gunSlot = new Gun[2] { null, null };
-    private int[] ammo = new int[3] { 0, 0, 0 };
+    private int[] ammo = new int[4] { 0, 0, 0, 0 };
 
     private GunType equippedType = GunType.Primary;
 

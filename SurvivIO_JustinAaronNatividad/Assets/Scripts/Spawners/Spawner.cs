@@ -13,6 +13,8 @@ public class Spawner : MonoBehaviour
     [SerializeField] protected float spawnCheckRadius;
     [SerializeField] protected LayerMask spawnCheckMask;
 
+    protected int spawnedCount = 0;
+
     private void Start()
     {
         for (int i = 0; i < spawnAmount; i++)
@@ -36,6 +38,7 @@ public class Spawner : MonoBehaviour
             {
                 SpawnPrefab(new Vector3(spawnX, spawnY, 0));
                 spawnAvailable = true;
+                spawnedCount++;
             }
         }
     }

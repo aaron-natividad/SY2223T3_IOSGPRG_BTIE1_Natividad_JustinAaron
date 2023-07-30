@@ -148,7 +148,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 5
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.7529412, g: 0.33682603, b: 0.26666668, a: 1}
   m_FlipX: 0
@@ -220,7 +220,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_TargetDisplay: 0
 --- !u!114 &8045686376066965259
 MonoBehaviour:
@@ -420,7 +420,6 @@ MonoBehaviour:
   movement: {fileID: 0}
   aiming: {fileID: 0}
   inventory: {fileID: 0}
-  unitDetection: {fileID: 0}
 --- !u!114 &8045686376302938370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -473,7 +472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunPosition: {fileID: 8045686377248833813}
-  maxAmmo: 5a000000780000003c000000
+  maxAmmo: 5a000000780000003c0000000a000000
   reloadTimeMultiplier: 2
   infiniteAmmo: 1
   canLoot: 0

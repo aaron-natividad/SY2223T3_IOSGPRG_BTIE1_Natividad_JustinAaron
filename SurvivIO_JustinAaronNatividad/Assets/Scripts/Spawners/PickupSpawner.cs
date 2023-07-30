@@ -9,7 +9,7 @@ public class PickupSpawner : Spawner
     [Header("Pickup Spawner")]
     [SerializeField] private GameObject[] gunPickups;
     [SerializeField] private GameObject[] ammoPickups;
-
+    [Space(10)]
     [SerializeField] private float gunSpawnWeight;
 
     protected override void SpawnPrefab(Vector3 spawnPosition)
@@ -22,14 +22,6 @@ public class PickupSpawner : Spawner
     private GameObject[] GetPickupArray()
     {
         float weight = Random.Range(0f, 1f);
-
-        if (weight <= gunSpawnWeight)
-        {
-            return gunPickups;
-        }
-        else
-        {
-            return ammoPickups;
-        }
+        return weight <= gunSpawnWeight ? gunPickups : ammoPickups;
     }
 }

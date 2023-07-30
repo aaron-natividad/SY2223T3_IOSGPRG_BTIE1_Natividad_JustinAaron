@@ -65,21 +65,51 @@ public class UIManager : MonoBehaviour
         ForceUpdateUI();
     }
 
-    public void UpdateHealth(float healthPercentage)
+    #region Public Methods
+    public void ActivateMessagePanel(string panelName)
+    {
+        playerUI.enabled = false;
+        messageUI.enabled = true;
+        foreach (GameObject panel in messagePanels)
+        {
+            panel.SetActive(panel.name == panelName);
+        }
+    }
+
+    public void EnablePlayerUI()
+    {
+        messageUI.enabled = false;
+        playerUI.enabled = true;
+    }
+
+    public void FadeCover(bool fadeIn, float fadeTime)
+    {
+        Color toColor = fadeIn ? Color.black : Color.clear;
+        LeanTween.color(cover.rectTransform, toColor, fadeTime).setIgnoreTimeScale(true);
+    }
+
+    public void SetCountdown(string countMessage)
+    {
+        countdownText.text = countMessage;
+    }
+    #endregion
+
+    #region Private Event Updates
+    private void UpdateHealth(float healthPercentage)
     {
         healthbar.fillAmount = healthPercentage;
     }
 
-    public void UpdateAmmo(int[] ammo)
+    private void UpdateAmmo(int[] ammo)
     {
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < 4; i++)
         {
             ammoText[i].text = ammo[i].ToString("000");
         }
         UpdateClipUI();
     }
 
-    public void UpdateGunUI(Gun[] guns, GunType equippedType)
+    private void UpdateGunUI(Gun[] guns, GunType equippedType)
     {
         for(int i = 0; i < 2; i++)
         {
@@ -89,12 +119,12 @@ public class UIManager : MonoBehaviour
 
         if (inventory.GetEquippedGun() != null)
         {
-            inventory.GetEquippedGun().OnClipChange = UpdateClipUI;
+            inventory.GetEquippedGun().OnClipChange += UpdateClipUI;
         }
         UpdateClipUI();
     }
 
-    public void UpdateClipUI()
+    private void UpdateClipUI()
     {
         if (inventory.GetEquippedGun() != null)
         {
@@ -102,24 +132,21 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateClipUI(string message)
+    private void UpdateClipUI(string message)
     {
         clipText.text = message;
     }
 
-    public void UpdateEnemyCount(int remainingEnemies)
+    private void UpdateEnemyCount(int remainingEnemies)
     {
         int rank = remainingEnemies + 1;
         enemyCountText.text = remainingEnemies.ToString() + " left";
         rankText.text = "Rank #" + rank.ToString();
     }
+    #endregion
 
-    public void SetCountdown(string countMessage)
-    {
-        countdownText.text = countMessage;
-    }
-
-    public void ForceUpdateUI()
+    #region Miscellaneous Private Methods
+    private void ForceUpdateUI()
     {
         if (unit == null)
         {
@@ -131,33 +158,10 @@ public class UIManager : MonoBehaviour
         UpdateClipUI();
     }
 
-    public void GetUnitComponents()
+    private void GetUnitComponents()
     {
         health = unit.GetComponent<HealthComponent>();
         inventory = unit.GetComponent<InventoryComponent>();
     }
-
-    public void ActivateMessagePanel(string panelName)
-    {
-        foreach(GameObject panel in messagePanels)
-        {
-            panel.SetActive(panel.name == panelName);
-        }
-    }
-
-    public void EnablePlayerUI(bool isEnabled)
-    {
-        playerUI.enabled = isEnabled;
-    }
-
-    public void EnableMessageUI(bool isEnabled)
-    {
-        messageUI.enabled = isEnabled;
-    }
-
-    public void FadeCover(bool fadeIn, float fadeTime)
-    {
-        Color toColor = fadeIn ? Color.black : Color.clear;
-        LeanTween.color(cover.rectTransform, toColor, fadeTime).setIgnoreTimeScale(true);
-    }
+    #endregion
 }

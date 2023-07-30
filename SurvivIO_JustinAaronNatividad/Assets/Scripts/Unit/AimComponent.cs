@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AimComponent : MonoBehaviour
 {
-    public bool isFiring;
+    [HideInInspector] public bool isFiring;
     private InventoryComponent inventory;
 
     private void Start()

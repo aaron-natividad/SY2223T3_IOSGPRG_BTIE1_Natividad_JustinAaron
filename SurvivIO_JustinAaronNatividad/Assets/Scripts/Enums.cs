@@ -2,7 +2,8 @@ public enum AmmoType
 {
     PistolAmmo = 0,     //9mm
     MachineGunAmmo = 1, //5.56 mm
-    ShotgunAmmo = 2 //12 gauge
+    ShotgunAmmo = 2, //12 gauge
+    RocketAmmo = 3 //40mm
 }
 
 public enum GunType
